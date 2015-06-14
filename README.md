@@ -9,7 +9,7 @@ javascript Camera handler with some options.
     - Grab image from player
     - Record stream to webm or ogg
 
-* [WebCodeCamJS] - Online Demo 
+* [ExpertCamJS] - Online Demo 
 
 <img src = "demo.png"/>
 
@@ -146,5 +146,5 @@ http://atandrastoth.co.uk/
 
 2015-06-13
 
-[ExpertCamJS]:http://atandrastoth.co.uk/main/pages/plugins/expertcam
+[ExpertCamJS]:http://atandrastoth.co.uk/main/pages/plugins/expertcam/
 [MediaStreamRecorder]:https://github.com/streamproc/MediaStreamRecorder
