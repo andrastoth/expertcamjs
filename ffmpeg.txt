@@ -1,0 +1,2 @@
+Copy ffmpeg executable to this folder.
+https://www.ffmpeg.org/

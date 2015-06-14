@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>ExpertCamJS</title>
+    </head>
+    <body>
+        <hr>
+        <h1 style="text-align:center;">Initialize with arguments and play local video</h1>
+        <hr>
+        <video></video>
+        <hr>
+        <button type="button" onclick="openVideo()">Open</button>
+        <hr>
+        <script type="text/javascript" src="../js/expertcam.js"></script>
+        <script type="text/javascript">
+        var args = {
+            width: 'auto',
+            height: 'auto',
+            constraints: {
+                video: false,
+                audio: false
+                }
+            }
+            var cam = new ExpertCamJS('video').init(args);
+            function openVideo(){
+                cam.playLocalVideo();
+            }
+        </script>
+    </body>
+</html>
