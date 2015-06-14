@@ -132,6 +132,16 @@
                 multiStreamRecorder.height = camera.options.height;
             }
             multiStreamRecorder.ondataavailable = function(blob) {
+                /*Without upload*/
+                var url = window.URL || window.webkitURL;
+                if (isChrome && hasAudio && hasVideo) {
+                    window.open(url.createObjectURL(blob.video));
+                    window.open(url.createObjectURL(blob.audio));
+                } else {
+                    window.open(url.createObjectURL(blob));
+                }
+                /*With upload*/
+                /*
                 var data = new FormData();
                 if (isChrome && hasAudio && hasVideo) {
                     data.append('audio-filename', filename + '.ogg');
@@ -154,6 +164,7 @@
                         alert(fileURL);
                     }
                 });
+                */
             };
             setTimeout(function() {
                 multiStreamRecorder.stop();
