@@ -3,28 +3,58 @@
     <head>
         <meta charset="UTF-8">
         <title>ExpertCamJS</title>
+        <style type="text/css">
+            .video-container{
+                display: inline-block;
+                position: relative;
+            }
+            ::cue {
+                font-family: cursive;
+                text-shadow: 2px 2px 2px black; 
+               color:#fff;
+               background-color: rgba(255, 255, 255, 0);
+            }
+        </style>
     </head>
     <body>
         <hr>
-        <h1 style="text-align:center;">Initialize with arguments and play local video</h1>
+        <h1 style="text-align:center;">Initialize with arguments and play local video with subtitle</h1>
         <hr>
-        <video></video>
+        Tested on:<br>
+        - Chrome Version 43.0.2357.124 m<br>
+        - Firefox 38.0.5<br>
+        - IE 11
         <hr>
-        <button type="button" onclick="openVideo()">Open</button>
+
+        <div class="video-container">
+            <video preload="auto"></video>
+        </div>
+        <hr>
+            Open video and subtitle (multiselect, subtitle is optional, currently only srt is supported)
+        <hr>
+        <button type="button" onclick="openVideo();">Open</button>
+        <button type="button" onclick="goFullScreen();">Fullsreen</button>
         <hr>
         <script type="text/javascript" src="../js/expertcam.js"></script>
         <script type="text/javascript">
         var args = {
-            width: 'auto',
-            height: 'auto',
+            //path correction
+        	noSignal: '../media/no_signal.png',
+            width: '100%',
+            height: '100%',
             constraints: {
                 video: false,
                 audio: false
                 }
-            }
+            };
             var cam = new ExpertCamJS('video').init(args);
             function openVideo(){
                 cam.playLocalVideo();
+            }
+            function goFullScreen(){
+                if(cam){
+                    cam.toggleFullScreen();
+                }
             }
         </script>
     </body>

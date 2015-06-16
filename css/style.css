@@ -1,0 +1,76 @@
+body {
+    padding-top: 50px;
+}
+
+#display {
+    background-color: #2d2d2d;
+}
+
+.thumbnail {
+    border: 0;
+}
+
+#camera-canvas, #shoot-img, #stream-video {
+    background-color: #2d2d2d;
+}
+
+#video-select, #audio-select {
+    display: inline-block;
+    min-width: 140px;
+    width: auto;
+}
+
+.btn {
+    margin-bottom: 2px;
+}
+
+.form-control {
+    height: 32px;
+}
+
+.h4, h4 {
+    width: auto;
+    float: left;
+    font-size: 20px;
+    line-height: 1.1;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.controls {
+    float: right;
+    display: inline-block;
+}
+
+.well {
+    position: relative;
+    display: inline-block;
+}
+
+.panel-heading {
+    display: inline-block;
+    width: 100%;
+}
+
+.container {
+    width: 100%
+}
+
+pre {
+    border: 0;
+    background-color: #333;
+    margin: 0;
+    line-height: 125%;
+    color: whitesmoke;
+}
+
+button {
+    outline: none !important;
+}
+
+::cue {
+    font-family: cursive;
+    text-shadow: 2px 2px 2px black;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0);
+}

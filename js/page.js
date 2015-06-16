@@ -1,3 +1,10 @@
+/*!
+ * ExpertCamJS 1.2.0 javascript video-camera handler
+ * Author: Tóth András
+ * Web: http://atandrastoth.co.uk
+ * email: atandrastoth@gmail.com
+ * Licensed under the MIT license
+ */
 (function(undefined) {
     var Q = function(sel) {
         var els = document.querySelectorAll(sel);
@@ -10,7 +17,7 @@
         audioSelect = Q('#audio-select'),
         shootImg = Q('#shoot-img'),
         shoot = Q('#shoot'),
-        stop = Q('#stop'),
+        pause = Q('#pause'),
         record = Q('#record'),
         streaming = Q('#streaming'),
         streamVideo = Q('#stream-video'),
@@ -37,44 +44,30 @@
             toggleClass([streaming, record], 'disabled', false);
         }
     };
-    Page.OnTV = function() {
+    Page.On = function() {
         if (!camera) {
-            camera = (new ExpertCamJS('#camera-canvas')).buildSelectMenu('#video-select', '#audio-select');
-            toggleClass([play], 'disabled', false);
-            toggleClass([streaming, record, shoot, stop], 'disabled', true);
-            toggleClass([localVideo], 'disabled', false);
-            audioSelect.disabled = false;
-            videoSelect.disabled = false;
-        } else if (camera && !camera.getStream()) {
-            toggleClass([play, streaming, record, shoot, stop], 'disabled', true);
-            camera.stop(true);
-            camera = null;
-        } else if (camera && camera.getStream()) {
-            audioSelect.disabled = false;
-            videoSelect.disabled = false;
-            toggleClass([streaming, record, shoot, stop], 'disabled', true);
+            camera = (new ExpertCamJS('#camera-canvas')).buildSelectMenu('#video-select', '#audio-select').init(args);
+        } else {
             camera.stop();
         }
+        toggleClass([streaming, record, shoot, pause], 'disabled', true);
+        toggleClass([localVideo, play], 'disabled', false);
+        audioSelect.disabled = false;
+        videoSelect.disabled = false;
     };
     Page.Play = function() {
-        if (videoSelect.selectedIndex === 0 && audioSelect.selectedIndex === 0) {
-            return;
-        }
-        if (!camera.isInitialized()) {
-            camera.init(args);
-            toggleClass([shoot, stop], 'disabled', false);
-        } else {
+        if (videoSelect.selectedIndex !== 0 || audioSelect.selectedIndex !== 0) {
             camera.play();
-            toggleClass([shoot, stop], 'disabled', false);
+            toggleClass([shoot, pause], 'disabled', false);
+            audioSelect.disabled = true;
+            videoSelect.disabled = true;
         }
-        audioSelect.disabled = true;
-        videoSelect.disabled = true;
     };
     Page.Streaming = function() {
         streamText[txt] = 'Captured stream';
         streamVideo.controls = false;
         if (camera && camera.getStream()) {
-            if (streamVideo.src.length === 0) {
+            if (!streamVideo.src || streamVideo.src.length === 0) {
                 streamVideo.src = URL.createObjectURL(camera.getStream());
             } else {
                 streamVideo.src = '';
@@ -93,11 +86,11 @@
             shootImg.setAttribute('src', src);
         }
     };
-    Page.LocalVideo = function(e) {
+    Page.LocalVideo = function() {
         if (camera) {
-            toggleClass([record, streaming], 'disabled', true);
+            toggleClass([record, streaming, play, pause], 'disabled', true);
             toggleClass([shoot], 'disabled', false);
-            camera.playLocalVideo(e);
+            camera.playLocalVideo();
         }
     };
     Page.FullScreen = function() {
@@ -133,6 +126,7 @@
             }
             multiStreamRecorder.ondataavailable = function(blob) {
                 /*Without upload*/
+                /*
                 var url = window.URL || window.webkitURL;
                 if (isChrome && hasAudio && hasVideo) {
                     window.open(url.createObjectURL(blob.video));
@@ -140,8 +134,12 @@
                 } else {
                     window.open(url.createObjectURL(blob));
                 }
+                */
                 /*With upload*/
-                /*
+                streamVideo.src = 'media/loading.webm';
+                streamText[txt] = 'Processing video';
+                streamVideo.controls = false;
+                streamVideo.loop = true;
                 var data = new FormData();
                 if (isChrome && hasAudio && hasVideo) {
                     data.append('audio-filename', filename + '.ogg');
@@ -160,11 +158,11 @@
                         streamVideo.src = fileURL;
                         streamText[txt] = 'Recorded stream';
                         streamVideo.controls = true;
+                        streamVideo.loop = false;
                     } else {
                         alert(fileURL);
                     }
                 });
-                */
             };
             setTimeout(function() {
                 multiStreamRecorder.stop();
@@ -214,7 +212,7 @@
             t -= 1E3;
             record.innerHTML = '<span>&nbsp;' + t / 1E3 + '&nbsp;</span>';
             if (t === 0) {
-                window.scrollTo(0, offset(streamVideo).top);
+                window.scrollTo(0, offset(streamVideo).top - 100);
                 clearInterval(count);
                 toggleClass([record], 'disabled', false);
                 record.innerHTML = '<span class="glyphicon glyphicon-record""></span>';

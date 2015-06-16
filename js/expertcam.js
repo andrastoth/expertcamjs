@@ -1,3 +1,11 @@
+
+/*!
+ * ExpertCamJS 1.2.0 javascript video-camera handler
+ * Author: Tóth András
+ * Web: http://atandrastoth.co.uk
+ * email: atandrastoth@gmail.com
+ * Licensed under the MIT license
+ */
 var ExpertCamJS = function(element) {
     var Version = {
         name: 'ExpertCamJS',
@@ -5,9 +13,10 @@ var ExpertCamJS = function(element) {
         author: 'Tóth András'
     };
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-    var videoSelect, ausioSelect, w, h;
-    var video = typeof element === 'string' ? document.querySelector(element) : element,
-        streams = {},
+    var video = typeof element === 'string' ? document.querySelector(element) : element;
+    var streams = {},
+        videoSelect = null,
+        ausioSelect = null,
         isStreaming = false,
         localStream = null,
         initialized = false;
@@ -26,12 +35,19 @@ var ExpertCamJS = function(element) {
             },
             audio: true
         },
-        noSignal: 'img/no_signal.png',
+        noSignal: 'media/no_signal.png',
+        videoTypes: 'video/mp4|video/webm|video/avi',
+        audioTypes: 'audio/wav|audio/mp3|audio/ogg|audio/mp3',
+        subTitleTypes: 'srt',
+        subTitleCoding: 'utf-8',
         cameraSuccess: function(stream) {
             console.log('cameraSuccess');
         },
         canPlayFunction: function() {
             console.log('canPlayFunction');
+        },
+        mediaStreamTrackError: function() {
+            alert('Sorry, the browser you are using does not support MediaStreamTrack');
         },
         getUserMediaError: function() {
             console.log('getUserMediaError');
@@ -93,7 +109,7 @@ var ExpertCamJS = function(element) {
             }
             return true;
         }
-        return false;
+        return true;
     }
 
     function gotSources(sourceInfos) {
@@ -118,11 +134,16 @@ var ExpertCamJS = function(element) {
         audioSelect = document.querySelector(selectorAudio);
         videoSelect.innerHTML = '<option value="false">Off</option>';
         audioSelect.innerHTML = '<option value="false">Off</option>';
-        if (typeof MediaStreamTrack.getSources !== 'undefined') {
-            MediaStreamTrack.getSources(gotSources);
+        if (typeof MediaStreamTrack !== 'undefined') {
+            if (typeof MediaStreamTrack.getSources !== 'undefined') {
+                MediaStreamTrack.getSources(gotSources);
+            } else {
+                html('<option value="true">On</option>', audioSelect);
+                html('<option value="true">On</option>', videoSelect);
+            }
         } else {
-            html('<option value="true">On</option>', audioSelect);
-            html('<option value="true">On</option>', videoSelect);
+            options.mediaStreamTrackError();
+            initialized = false;
         }
     }
 
@@ -143,18 +164,26 @@ var ExpertCamJS = function(element) {
     }
 
     function setEventListeners() {
-        video.addEventListener('canplay', function(e) {
-            isStreaming = true;
-            options.canPlayFunction();
-        }, false);
-        video.addEventListener('play', function() {}, false);
+        video.addEventListener('canplay', canPlay, false);
+        video.addEventListener('play', nowPlay, false);
+        video.addEventListener("loadedmetadata", loadedMetaData, false);
     }
+
+    function nowPlay() {}
+
+    function canPlay() {
+        isStreaming = true;
+        options.canPlayFunction();
+    }
+
+    function loadedMetaData() {}
 
     function pause() {
         video.pause();
     }
 
     function stop(bol) {
+        cloneVideo();
         var src = bol ? '' : options.noSignal;
         noSignal(src);
         video.pause();
@@ -168,8 +197,12 @@ var ExpertCamJS = function(element) {
     }
 
     function play() {
-        changeConstraints();
+        if (!initialized) {
+            initialized = true;
+            setEventListeners();
+        }
         if (!localStream) {
+            changeConstraints();
             init();
         }
         video.play();
@@ -198,17 +231,76 @@ var ExpertCamJS = function(element) {
         return canvas.toDataURL();
     }
 
-    function localVideo(e) {
+    function localVideo() {
         stop(true);
-        var input = html('<input type="file" accept="video/*;audio/*" style="display:none;">');
+        cloneVideo();
+        var input = html('<input type="file" accept="*.*" multiple>');
         input.onchange = function() {
-            if (this.files[0].length !== 0) {
-                video.src = URL.createObjectURL(this.files[0]);
-                video.controls = true;
-                video.muted = false;
-            }
+            [].forEach.call(this.files, function(file, index) {
+                var fileType = file.type.toLocaleLowerCase();
+                var fileName = file.name.toLocaleLowerCase();
+                if (options.videoTypes.split('|').indexOf(fileType) !== -1 || options.audioTypes.split('|').indexOf(fileType) !== -1) {
+                    // IE, srt must be load first ???
+                    setTimeout(function() {
+                        video.src = URL.createObjectURL(file);
+                        video.controls = true;
+                        video.muted = false;
+                    }, 500);
+                }
+                if (options.subTitleTypes.split('|').indexOf(fileName.split('.').reverse()[0]) !== -1) {
+                    var reader = new FileReader();
+                    reader.onload = (function(file) {
+                        return function(e) {
+                            processSubtitle(e.target.result);
+                        };
+                    })(file);
+                    reader.readAsText(file, options.subTitleCoding);
+                }
+            });
         };
         input.click();
+    }
+
+    function processSubtitle(e) {
+        var subtitle = [];
+        var rows = e.split('\n');
+        var sub = function() {
+            this.from = 0;
+            this.to = 0;
+            this.html = '';
+        };
+        var tmp;
+        var rowAdd = false;
+        var textTrk;
+        [].forEach.call(rows, function(row, index) {
+            if (row.trim() == '') {
+                subtitle.push(tmp);
+                rowAdd = false;
+            }
+            if (rowAdd) {
+                tmp.html += row.concat('\n');
+            }
+            if (row.indexOf('-->') !== -1) {
+                tmp = new sub();
+                tmp.from = createTime(row.split('-->')[0].trim());
+                tmp.to = createTime(row.split('-->')[1].trim());
+                rowAdd = true;
+            }
+        });
+        subtitle.push(tmp);
+        var track = video.addTextTrack('subtitles', 'srt', 'en');
+        track.mode = 'showing';
+        subtitle.forEach(function(sub, index) {
+            track.addCue(new(window.VTTCue || window.TextTrackCue)(sub.from, sub.to, sub.html));
+        });
+        track.mode = 'showing';
+    }
+
+    function createTime(data) {
+        var td = data.replace(/\D/g, '|').split('|');
+        var time1 = new Date('2000', '01', '01', '00', '00', '00', '000');
+        var time2 = new Date('2000', '01', '01', td[0], td[1], td[2], td[3]);
+        return (time2.getTime() - time1.getTime()) / 1000;
     }
 
     function changeConstraints() {
@@ -252,6 +344,20 @@ var ExpertCamJS = function(element) {
         return video.videoHeight / h;
     }
 
+    function cloneVideo() {
+        var cloneVideo = video.cloneNode(true);
+        (video.parentElement || video.parentNode).insertBefore(cloneVideo, video);
+        removeElement(video);
+        video = cloneVideo;
+        video.controls = false;
+        video.muted = true;
+        setEventListeners();
+    }
+
+    function removeElement(el) {
+        el && el.parentNode && el.parentNode.removeChild(el);
+    }
+
     function mergeRecursive(target, source) {
         if (typeof target !== 'object') {
             target = {};
@@ -292,7 +398,6 @@ var ExpertCamJS = function(element) {
         }
         video.setAttribute('src', '');
     }
-    noSignal(options.noSignal);
     return {
         init: function(opt) {
             if (initialized) {
@@ -304,10 +409,7 @@ var ExpertCamJS = function(element) {
             }
             if (opt) {
                 options = mergeRecursive(options, opt);
-            }
-            if (init()) {
-                initialized = true;
-                setEventListeners();
+                noSignal(options.noSignal);
             }
             return this;
         },
@@ -319,11 +421,11 @@ var ExpertCamJS = function(element) {
             pause();
             return this;
         },
-        stop: function(boolean) {
-            stop(boolean);
+        stop: function(bol) {
+            stop(bol);
             return this;
         },
-        play: function(boolean) {
+        play: function() {
             play();
             return this;
         },
@@ -343,11 +445,16 @@ var ExpertCamJS = function(element) {
             filter(type, val);
             return this;
         },
-        playLocalVideo: function(e) {
-            localVideo(e);
+        playLocalVideo: function() {
+            localVideo();
         },
-        toggleFullScreen: function() {
-            fullScreen.toggleFullScreen(video);
+        toggleFullScreen: function(container) {
+            if (container) {
+                container = typeof container === 'string' ? document.querySelector(container) : container;
+            } else {
+                container = video;
+            }
+            fullScreen.toggleFullScreen(container);
             return this;
         },
         options: options,
