@@ -4,7 +4,7 @@ if (isset($_FILES["video-blob"]) && isset($_FILES["audio-blob"])) {
     $audio = getcwd() . '/uploads/' . $_POST["audio-filename"];
     if (move_uploaded_file($_FILES["audio-blob"]["tmp_name"], $audio) && move_uploaded_file($_FILES["video-blob"]["tmp_name"], $video)) {
         
-        $mergedFile = getcwd() . '/uploads/' . $_POST["video-filename"] . '-merged.webm';
+        $mergedFile = getcwd() . '/uploads/' . str_replace('.webm', '', $_POST["video-filename"]) . '-merged.webm';
         @unlink($mergedFile);
         
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
@@ -47,8 +47,5 @@ else if (isset($_FILES["video-blob"])) {
     }
 }
 function path2url($file, $Protocol = 'http://') {
-    $path = str_replace("\\", '/', $_SERVER['DOCUMENT_ROOT']);
-    $file = str_replace("\\", '/', $file);
-    return $Protocol . $_SERVER['HTTP_HOST'] . '/' . str_replace($path, '', $file);
+    return $Protocol . str_replace(str_replace("\\", '/', $_SERVER['DOCUMENT_ROOT']), $_SERVER['HTTP_HOST'] . '/', str_replace("\\", '/', $file));
 }
-?>
