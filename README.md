@@ -14,6 +14,8 @@ javascript Camera handler with some options.
 
 <img src = "compatiblity.png"/>
 
+<img src = "demo.png"/>
+
 Version
 ----
 
