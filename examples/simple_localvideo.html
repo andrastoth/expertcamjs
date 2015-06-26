@@ -20,12 +20,6 @@
         <hr>
         <h1 style="text-align:center;">Initialize with arguments and play local video with subtitle</h1>
         <hr>
-        Tested on:<br>
-        - Chrome Version 43.0.2357.124 m<br>
-        - Firefox 38.0.5<br>
-        - IE 11
-        <hr>
-
         <div class="video-container">
             <video preload="auto"></video>
         </div>
@@ -45,7 +39,8 @@
             constraints: {
                 video: false,
                 audio: false
-                }
+                },
+             subTitleCoding: 'windows-1252'
             };
             var cam = new ExpertCamJS('video').init(args);
             function openVideo(){

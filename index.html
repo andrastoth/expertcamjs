@@ -10,17 +10,86 @@
         <title>ExpertCamJS</title>
         <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
+    </head>
     <body>
         <div class="page-header text-center">
-            <h1 style="margin-left:10px;">ExpertCamJS V 1.2.0<br>
-                    <small>Download from:
+            <h1 style="color: cadetblue;">ExpertCamJS V 1.5.0<br>
+                <small>Download from:
                     <a href="https://github.com/andrastoth/expertcamjs" target="_blank"> GitHub </a> OR
                     <a href="http://www.jsclasses.org/package/433-JavaScript-camera-handler.html" target="_blank"> JSclasses </a>
-                    </small>
-                </h1>
-            <p>If you are using Chrome then recorded video merge does not work, because My server is can not able to run PHP exec function!</p>
-            <p>News in this version: Play local video file with subtitle (using multi select)</p>
+                </small>
+            </h1>
+            <p style="font-style: italic;">
+                <span class="glyphicon glyphicon-info-sign"></span> 
+                        News in this version: Optimized for all modern browsers
+                <span class="glyphicon glyphicon-info-sign"></span>
+            </p>
         </div>
+        <div class="container text-center">
+          <h2>Compatibility Table</h2>
+          <p>Current state of browser compatibility 2015-06-26</p>            
+          <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Functions</th>
+                    <th><a>IE11</a><img src="css/Internet_Explorer_9.png"></th>
+                    <th><a>MS Spartan</a><img src="css/949320192f43b9d8.png"></th>
+                    <th><a>Chrome 43</a><img src="css/google-chrome.png"></th>
+                    <th><a>Chrome Canary</a><img src="css/Chrome_Canary_Icon.png"></th>
+                    <th><a>Firefox 38.0.5</a><img src="css/mozilla_firefox.png"></th>
+                    <th><a>Firefox Nightly</a><img src="css/firefox-dev.png"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong><a>Media stream capture</a></strong></td>
+                    <td class="danger">No</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                </tr>
+                <tr>
+                    <td><strong><a>Media stream record</a></strong></td>
+                    <td class="danger">No</td>
+                    <td class="danger">No</td>
+                    <td class="warning">Partial when recording<br>audio and video<br>FFmpeg required</td>
+                    <td class="warning">Partial when recording<br>audio and video<br>FFmpeg required</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                </tr>
+                <tr>
+                    <td><strong><a>Build select menu</a></strong></td>
+                    <td class="danger">No</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                    <td class="warning">Partial (On/Off) but selectable<br> on built in pop up window</td>
+                    <td class="success">Yes</td>
+                </tr>
+                <tr>
+                    <td><strong><a>Local Video with subtitle</a></strong></td>
+                    <td class="success">Excellent<br>built in audio track, <br>subtitle track selector</td>
+                    <td class="success">Excellent<br>built in audio track, <br>subtitle track selector</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                </tr>
+                <tr>
+                    <td><strong><a>CSS filters</a></strong></td>
+                    <td class="danger">No</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                    <td class="success">Yes</td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+        <hr>
         <div class="container">
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -81,7 +150,7 @@
                                 <p>image shoot from canvas</p>
                             </div>
                             <div class="well">
-                                <video id="stream-video" width="320" height="240" autoplay></video>
+                                <video id="stream-video" width="320" height="240" autoplay=""></video>
                             </div>
                             <div class="caption">
                                 <h3>Captured Stream</h3>
@@ -91,7 +160,8 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-<div style="background: #272822; overflow:auto;width:auto;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #f92672">&lt;html&gt;</span>
+                <h3>Required HTML &amp; Javascript example</h3>
+<div style="background: #272822; overflow:auto;width:auto;height:400px;"><pre style="margin: 0; line-height: 125%"><span style="color: #f92672">&lt;html&gt;</span>
     <span style="color: #f92672">&lt;head&gt;</span>
         <span style="color: #f92672">&lt;meta</span> <span style="color: #a6e22e">charset=</span><span style="color: #e6db74">&quot;UTF-8&quot;</span><span style="color: #f92672">&gt;</span>
         <span style="color: #f92672">&lt;title&gt;</span>ExpertCamJS<span style="color: #f92672">&lt;/title&gt;</span>
@@ -115,49 +185,49 @@
         <span style="color: #f92672">&lt;hr&gt;</span>
         <span style="color: #f92672">&lt;script </span><span style="color: #a6e22e">type=</span><span style="color: #e6db74">&quot;text/javascript&quot;</span> <span style="color: #a6e22e">src=</span><span style="color: #e6db74">&quot;js/expertcam.js&quot;</span><span style="color: #f92672">&gt;&lt;/script&gt;</span>
         <span style="color: #f92672">&lt;script </span><span style="color: #a6e22e">type=</span><span style="color: #e6db74">&quot;text/javascript&quot;</span><span style="color: #f92672">&gt;</span>
-        <span style="color: #75715e">/*------------------------------------- Available parameters ------------------------------------*/</span>
+        <span style="color: #75715e">/*--------------------------------------------- Available parameters --------------------------------------------*/</span>
 
         <span style="color: #66d9ef">var</span> <span style="color: #a6e22e">defaults</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">{</span>
-            <span style="color: #a6e22e">width</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">320</span><span style="color: #f8f8f2">,</span>                                                 <span style="color: #75715e">// video width</span>
-            <span style="color: #a6e22e">height</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">240</span><span style="color: #f8f8f2">,</span>                                                <span style="color: #75715e">// video height</span>
+            <span style="color: #a6e22e">width</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">320</span><span style="color: #f8f8f2">,</span>
+            <span style="color: #a6e22e">height</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">240</span><span style="color: #f8f8f2">,</span>
             <span style="color: #a6e22e">constraints</span><span style="color: #f92672">:</span> <span style="color: #f8f8f2">{</span>
                 <span style="color: #a6e22e">video</span><span style="color: #f92672">:</span> <span style="color: #f8f8f2">{</span>
                     <span style="color: #a6e22e">mandatory</span><span style="color: #f92672">:</span> <span style="color: #f8f8f2">{</span>
-                        <span style="color: #a6e22e">maxWidth</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">1280</span><span style="color: #f8f8f2">,</span>                                 <span style="color: #75715e">// max Videosource resolution width</span>
-                        <span style="color: #a6e22e">maxHeight</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">720</span>                                  <span style="color: #75715e">// max Videosource resolution height</span>
+                        <span style="color: #a6e22e">maxWidth</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">1280</span><span style="color: #f8f8f2">,</span>
+                        <span style="color: #a6e22e">maxHeight</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">720</span>
                     <span style="color: #f8f8f2">},</span>
                     <span style="color: #a6e22e">optional</span><span style="color: #f92672">:</span> <span style="color: #f8f8f2">[{</span>
-                        <span style="color: #a6e22e">sourceId</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">true</span>                                  <span style="color: #75715e">// videosource id video enabled</span>
+                        <span style="color: #a6e22e">sourceId</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">true</span>
                     <span style="color: #f8f8f2">}]</span>
                 <span style="color: #f8f8f2">},</span>
-                <span style="color: #a6e22e">audio</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">true</span>                                             <span style="color: #75715e">// audio enabled</span>
+                <span style="color: #a6e22e">audio</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">true</span>
             <span style="color: #f8f8f2">},</span>
-            <span style="color: #a6e22e">noSignal</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;media/no_signal.png&#39;</span><span style="color: #f8f8f2">,</span>                            <span style="color: #75715e">// nosignal image source</span>
-            <span style="color: #a6e22e">videoTypes</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;video/mp4|video/webm|video/avi&#39;</span><span style="color: #f8f8f2">,</span>               <span style="color: #75715e">// audio types</span>
-            <span style="color: #a6e22e">audioTypes</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;audio/wav|audio/mp3|audio/ogg|audio/mp3&#39;</span><span style="color: #f8f8f2">,</span>      <span style="color: #75715e">// video types</span>
-            <span style="color: #a6e22e">subTitleTypes</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;srt&#39;</span><span style="color: #f8f8f2">,</span>                                       <span style="color: #75715e">// subtitle filetypes</span>
-            <span style="color: #a6e22e">subTitleCoding</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;utf-8&#39;</span><span style="color: #f8f8f2">,</span>                                    <span style="color: #75715e">// subtitle encoding</span>
-            <span style="color: #a6e22e">cameraSuccess</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">function</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">stream</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>                           <span style="color: #75715e">// init when cameraSucess function is done</span>
-                <span style="color: #a6e22e">console</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">log</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;cameraSuccess&#39;</span><span style="color: #f8f8f2">);</span>   
+            <span style="color: #a6e22e">noSignal</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;media/no_signal.png&#39;</span><span style="color: #f8f8f2">,</span>
+            <span style="color: #a6e22e">videoTypes</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;video/mp4|video/webm|video/avi&#39;</span><span style="color: #f8f8f2">,</span>
+            <span style="color: #a6e22e">audioTypes</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;audio/wav|audio/mp3|audio/ogg|audio/mp3&#39;</span><span style="color: #f8f8f2">,</span>
+            <span style="color: #a6e22e">subTitleTypes</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;srt&#39;</span><span style="color: #f8f8f2">,</span>
+            <span style="color: #a6e22e">subTitleCoding</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;utf-8&#39;</span><span style="color: #f8f8f2">,</span>
+            <span style="color: #a6e22e">cameraSuccess</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">function</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">stream</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+                <span style="color: #a6e22e">console</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">log</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;cameraSuccess&#39;</span><span style="color: #f8f8f2">);</span>
             <span style="color: #f8f8f2">},</span>
-            <span style="color: #a6e22e">canPlayFunction</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">function</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>                               <span style="color: #75715e">// init when canPlayFunction is done</span>
+            <span style="color: #a6e22e">canPlayFunction</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">function</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
                 <span style="color: #a6e22e">console</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">log</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;canPlayFunction&#39;</span><span style="color: #f8f8f2">);</span>
             <span style="color: #f8f8f2">},</span>
-            <span style="color: #a6e22e">mediaStreamTrackError</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">function</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>                         <span style="color: #75715e">// init when MediaStreamTrack is not supported</span>
-                <span style="color: #a6e22e">alert</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;Sorry, the browser you are using does not support MediaStreamTrack&#39;</span><span style="color: #f8f8f2">);</span>
+            <span style="color: #a6e22e">getDevicesError</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">function</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">error</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+                <span style="color: #a6e22e">console</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">log</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">error</span><span style="color: #f8f8f2">);</span>
             <span style="color: #f8f8f2">},</span>
-            <span style="color: #a6e22e">getUserMediaError</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">function</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>                             <span style="color: #75715e">// init when getUserMediaError detected</span>
-                <span style="color: #a6e22e">console</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">log</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;getUserMediaError&#39;</span><span style="color: #f8f8f2">);</span>
+            <span style="color: #a6e22e">getUserMediaError</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">function</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">error</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
+                <span style="color: #a6e22e">console</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">log</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">error</span><span style="color: #f8f8f2">);</span>
             <span style="color: #f8f8f2">},</span>
-            <span style="color: #a6e22e">cameraError</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">function</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">error</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>                              <span style="color: #75715e">// init when cameraError detected</span>
+            <span style="color: #a6e22e">cameraError</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">function</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">error</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
                 <span style="color: #a6e22e">console</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">log</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">error</span><span style="color: #f8f8f2">);</span>
             <span style="color: #f8f8f2">}</span>
         <span style="color: #f8f8f2">};</span>
-        <span style="color: #75715e">/*---------------------------- Initialization: please check out examples --------------------------*/</span>
-        <span style="color: #75715e">/*-------------------------- Simple initialization with default parameters ------------------------*/</span>
+        <span style="color: #75715e">/*------------------------------------ Initialization: please check out examples ----------------------------------*/</span>
+        <span style="color: #75715e">/*---------------------------------- Simple initialization with default parameters --------------------------------*/</span>
          <span style="color: #66d9ef">new</span> <span style="color: #a6e22e">ExpertCamJS</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;video&#39;</span><span style="color: #f8f8f2">).</span><span style="color: #a6e22e">init</span><span style="color: #f8f8f2">().</span><span style="color: #a6e22e">play</span><span style="color: #f8f8f2">();</span>
-        <span style="color: #75715e">/*------------------------- Simple initialization with build select menu -------------------------*/</span>
-        <span style="color: #66d9ef">var</span> <span style="color: #a6e22e">cam</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">new</span> <span style="color: #a6e22e">ExpertCamJS</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;video&#39;</span><span style="color: #f8f8f2">).</span><span style="color: #a6e22e">buildSelectMenu</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;#video&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&#39;#audio&#39;</span><span style="color: #f8f8f2">).</span><span style="color: #a6e22e">init</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">args</span><span style="color: #f8f8f2">);</span>
+        <span style="color: #75715e">/*---------------------------------- Simple initialization with build select menu ---------------------------------*/</span>
+        <span style="color: #66d9ef">var</span> <span style="color: #a6e22e">cam</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">new</span> <span style="color: #a6e22e">ExpertCamJS</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;video&#39;</span><span style="color: #f8f8f2">).</span><span style="color: #a6e22e">init</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">args</span><span style="color: #f8f8f2">).</span><span style="color: #a6e22e">buildSelectMenu</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;#video&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&#39;#audio&#39;</span><span style="color: #f8f8f2">);</span>
         <span style="color: #66d9ef">function</span> <span style="color: #a6e22e">play</span><span style="color: #f8f8f2">(){</span>
             <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">play</span><span style="color: #f8f8f2">();</span>
         <span style="color: #f8f8f2">}</span>
@@ -167,7 +237,10 @@
         <span style="color: #66d9ef">function</span> <span style="color: #a6e22e">stop</span><span style="color: #f8f8f2">(){</span>
             <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">stop</span><span style="color: #f8f8f2">();</span>
         <span style="color: #f8f8f2">}</span>
-        <span style="color: #75715e">/*-------------------------- Simple initialization with play local video --------------------------*/</span>
+        <span style="color: #66d9ef">function</span> <span style="color: #a6e22e">openVideo</span><span style="color: #f8f8f2">(){</span>
+           <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">playLocalVideo</span><span style="color: #f8f8f2">();</span>
+        <span style="color: #f8f8f2">}</span>
+        <span style="color: #75715e">/*---------------------------------- Simple initialization with play local video ----------------------------------*/</span>
         <span style="color: #66d9ef">var</span> <span style="color: #a6e22e">args</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">{</span>
             <span style="color: #a6e22e">width</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;100%&#39;</span><span style="color: #f8f8f2">,</span>
             <span style="color: #a6e22e">height</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;100%&#39;</span><span style="color: #f8f8f2">,</span>
@@ -185,21 +258,22 @@
                     <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">toggleFullScreen</span><span style="color: #f8f8f2">();</span>
                 <span style="color: #f8f8f2">}</span>
             <span style="color: #f8f8f2">}</span>
-        <span style="color: #75715e">/*-------------------------------------- Available funtions --------------------------------------*/</span>
+        <span style="color: #75715e">/*---------------------------------------------- Available funtions ----------------------------------------------*/</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">buildSelectMenu</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">selectorVideo</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">selectorAudio</span><span style="color: #f8f8f2">);</span>  <span style="color: #75715e">// build select menu, return ExpertCamJS object</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">pause</span><span style="color: #f8f8f2">();</span>                                        <span style="color: #75715e">// pause video, return ExpertCamJS object</span>
-        <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">stop</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">boolean</span><span style="color: #f8f8f2">);</span>                                  <span style="color: #75715e">// stop video, boolean is true set video poster options.nosignal </span>
+        <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">stop</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">boolean</span><span style="color: #f8f8f2">);</span>                                  <span style="color: #75715e">// stop video, boolean is true set video poster options.noSignal</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">play</span><span style="color: #f8f8f2">();</span>                                         <span style="color: #75715e">// play stream, return ExpertCamJS object</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">getLastImageSrc</span><span style="color: #f8f8f2">();</span>                              <span style="color: #75715e">// grab image from video, return dataURL</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">isInitialized</span><span style="color: #f8f8f2">();</span>                                <span style="color: #75715e">// return true Or false</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">getStream</span><span style="color: #f8f8f2">();</span>                                    <span style="color: #75715e">// return Stream</span>
-        <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">getVideo</span><span style="color: #f8f8f2">();</span>                                     <span style="color: #75715e">// return Video URL</span>
+        <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">getVideo</span><span style="color: #f8f8f2">();</span>                                     <span style="color: #75715e">// return video element</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">cssFilter</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">type</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">val</span><span style="color: #f8f8f2">);</span>                           <span style="color: #75715e">// CSS3 filters example &#39;blur&#39;, &#39;2px&#39;</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">playLocalVideo</span><span style="color: #f8f8f2">();</span>                               <span style="color: #75715e">// open localvideo browser window</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">toggleFullScreen</span><span style="color: #f8f8f2">();</span>                             <span style="color: #75715e">// video toggle Full Screen</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">options</span>                                         <span style="color: #75715e">// return options get, set</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">version</span>                                         <span style="color: #75715e">// return version information</span>
-        <span style="color: #75715e">/*        for record and upload, merge video please check out the complex demo page source       */</span>
+        <span style="color: #a6e22e">HTMLVideoElement</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">streamSrc</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">stream</span><span style="color: #f8f8f2">)</span>                  <span style="color: #75715e">// cross browser createObject url function to play stream </span>
+        <span style="color: #75715e">/*--------------- for record and upload, merge video please check out the complex demo page source ---------------*/</span>
         <span style="color: #f92672">&lt;/script&gt;</span>
     <span style="color: #f92672">&lt;/body&gt;</span>
 <span style="color: #f92672">&lt;/html&gt;</span>
@@ -211,5 +285,4 @@
         <script type="text/javascript" src="js/expertcam.js"></script>
         <script type="text/javascript" src="js/page.js"></script>
     </body>
-
 </html>

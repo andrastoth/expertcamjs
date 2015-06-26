@@ -74,3 +74,21 @@ button {
     color: #fff;
     background-color: rgba(255, 255, 255, 0);
 }
+.table-bordered *{
+    cursor: default;
+}
+.table-bordered a:hover{
+    text-decoration: none;
+}
+.table-bordered th a{
+      vertical-align: middle;
+      float: right;
+      line-height: 3.49;
+}
+.table-bordered td a{
+    vertical-align: middle;
+    float: left;
+}
+.table-bordered th img{
+      float: left;
+}

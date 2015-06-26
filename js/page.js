@@ -1,6 +1,6 @@
 /*!
- * ExpertCamJS 1.2.0 javascript video-camera handler
- * Author: Tóth András
+ * ExpertCamJS 1.5.0 javascript video-camera handler
+ * Author: TÃ³th AndrÃ¡s
  * Web: http://atandrastoth.co.uk
  * email: atandrastoth@gmail.com
  * Licensed under the MIT license
@@ -25,13 +25,22 @@
     streamVideo.onended = function(e) {
         this.removeAttribute('src');
     };
-    var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-    var isFirefox = typeof InstallTrigger !== 'undefined';
-    var isChrome = !!window.chrome && !isOpera;
+    var isChrome = !!navigator.webkitGetUserMedia;
     var camera;
     var args = {
-        getUserMediaError: function() {
-            alert('Sorry, the browser you are using does not support getUserMedia');
+        getDevicesError: function(error) {
+            var p, message = 'Error detected with the following parameters:\n';
+            for (p in error) {
+                message += p + ': ' + error[p] + '\n';
+            }
+            alert(message);
+        },
+        getUserMediaError: function(error) {
+            var p, message = 'Error detected with the following parameters:\n';
+            for (p in error) {
+                message += p + ': ' + error[p] + '\n';
+            }
+            alert(message);
         },
         cameraError: function(error) {
             var p, message = 'Error detected with the following parameters:\n';
@@ -46,11 +55,12 @@
     };
     Page.On = function() {
         if (!camera) {
-            camera = (new ExpertCamJS('#camera-canvas')).buildSelectMenu('#video-select', '#audio-select').init(args);
+            camera = (new ExpertCamJS('#camera-canvas')).init(args).buildSelectMenu('#video-select', '#audio-select');
         } else {
             camera.stop();
+            streamVideo.streamSrc();
         }
-        toggleClass([streaming, record, shoot, pause], 'disabled', true);
+        toggleClass([record, shoot, pause], 'disabled', true);
         toggleClass([localVideo, play], 'disabled', false);
         audioSelect.disabled = false;
         videoSelect.disabled = false;
@@ -58,7 +68,7 @@
     Page.Play = function() {
         if (videoSelect.selectedIndex !== 0 || audioSelect.selectedIndex !== 0) {
             camera.play();
-            toggleClass([shoot, pause], 'disabled', false);
+            toggleClass([shoot, pause, streaming], 'disabled', false);
             audioSelect.disabled = true;
             videoSelect.disabled = true;
         }
@@ -66,13 +76,11 @@
     Page.Streaming = function() {
         streamText[txt] = 'Captured stream';
         streamVideo.controls = false;
+        streamVideo.muted = true;
         if (camera && camera.getStream()) {
-            if (!streamVideo.src || streamVideo.src.length === 0) {
-                streamVideo.src = URL.createObjectURL(camera.getStream());
-            } else {
-                streamVideo.src = '';
-                streamVideo.removeAttribute('src');
-            }
+            streamVideo.streamSrc(camera.getStream());
+        } else {
+            streamVideo.streamSrc();
         }
     };
     Page.Stop = function() {
@@ -107,12 +115,16 @@
             var multiStreamRecorder;
             var hasAudio = Boolean(stream.getAudioTracks().length);
             var hasVideo = Boolean(stream.getVideoTracks().length);
-            if (hasAudio && hasVideo && isFirefox) {
+            if (hasAudio && hasVideo && !isChrome) {
                 multiStreamRecorder = new MediaStreamRecorder(stream);
                 multiStreamRecorder.mimeType = 'video/webm';
+                multiStreamRecorder.width = camera.options.width;
+                multiStreamRecorder.height = camera.options.height;
             } else if (hasAudio && hasVideo && isChrome) {
                 multiStreamRecorder = new MultiStreamRecorder(stream);
                 multiStreamRecorder.video = camera.getVideo();
+                multiStreamRecorder.width = camera.options.width;
+                multiStreamRecorder.height = camera.options.height;
                 multiStreamRecorder.audioChannels = 1;
             } else if (hasAudio && !hasVideo) {
                 multiStreamRecorder = new MediaStreamRecorder(stream);
@@ -159,6 +171,7 @@
                         streamText[txt] = 'Recorded stream';
                         streamVideo.controls = true;
                         streamVideo.loop = false;
+                        streamVideo.muted = false;
                     } else {
                         alert(fileURL);
                     }
@@ -197,7 +210,7 @@
     };
     Page.changeHueCSS = function(el) {
         camera.cssFilter('hue-rotate', el.value.toString() + 'deg');
-        document.querySelector('#hue-value')[txt] = 'Sepia: ' + el.value.toString() + 'deg';
+        document.querySelector('#hue-value')[txt] = 'Hue: ' + el.value.toString() + 'deg';
     };
     Page.changeSaturateCSS = function(el) {
         camera.cssFilter('saturate', el.value);

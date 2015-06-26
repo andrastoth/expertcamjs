@@ -8,14 +8,20 @@ javascript Camera handler with some options.
     - Forward captured stream to another object
     - Grab image from player
     - Record captured stream to webm or ogg
+    - Optimized for all modern browser
 
 * [ExpertCamJS] - Online Demo 
 
-<img src = "demo.png"/>
+<img src = "compatiblity.png"/>
 
 Version
 ----
 
+1.5.0
+    - Optimized for all modern browser
+    
+Version
+----
 1.2.0
 
     - Open local video or audio file with subtitle
@@ -24,7 +30,6 @@ Version
 
 Version
 ----
-
 1.0.0
 
     - Capture video, audio
@@ -52,7 +57,7 @@ Required HTML & Javascript example
     <body>
         <hr>
         <h1 style="text-align:center;">Examples</h1>
-     	<hr>
+        <hr>
         <h4>Video:</h4>
         <select id="video"></select>
         <hr>
@@ -68,49 +73,49 @@ Required HTML & Javascript example
         <hr>
         <script type="text/javascript" src="js/expertcam.js"></script>
         <script type="text/javascript">
-        /*------------------------------------- Available parameters ------------------------------------*/
+        /*--------------------------------------------- Available parameters --------------------------------------------*/
 
         var defaults = {
-            width: 320,                                                 // video width
-            height: 240,                                                // video height
+            width: 320,
+            height: 240,
             constraints: {
                 video: {
                     mandatory: {
-                        maxWidth: 1280,                                 // max Videosource resolution width
-                        maxHeight: 720                                  // max Videosource resolution height
+                        maxWidth: 1280,
+                        maxHeight: 720
                     },
                     optional: [{
-                        sourceId: true                                  // videosource id video enabled
+                        sourceId: true
                     }]
                 },
-                audio: true                                             // audio enabled
+                audio: true
             },
-            noSignal: 'media/no_signal.png',                            // nosignal image source
-            videoTypes: 'video/mp4|video/webm|video/avi',               // audio types
-            audioTypes: 'audio/wav|audio/mp3|audio/ogg|audio/mp3',      // video types
-            subTitleTypes: 'srt',                                       // subtitle filetypes
-            subTitleCoding: 'utf-8',                                    // subtitle encoding
-            cameraSuccess: function(stream) {                           // init when cameraSucess function is done
-                console.log('cameraSuccess');   
+            noSignal: 'media/no_signal.png',
+            videoTypes: 'video/mp4|video/webm|video/avi',
+            audioTypes: 'audio/wav|audio/mp3|audio/ogg|audio/mp3',
+            subTitleTypes: 'srt',
+            subTitleCoding: 'utf-8',
+            cameraSuccess: function(stream) {
+                console.log('cameraSuccess');
             },
-            canPlayFunction: function() {                               // init when canPlayFunction is done
+            canPlayFunction: function() {
                 console.log('canPlayFunction');
             },
-            mediaStreamTrackError: function() {                         // init when MediaStreamTrack is not supported
-                alert('Sorry, the browser you are using does not support MediaStreamTrack');
+            getDevicesError: function(error) {
+                console.log(error);
             },
-            getUserMediaError: function() {                             // init when getUserMediaError detected
-                console.log('getUserMediaError');
+            getUserMediaError: function(error) {
+                console.log(error);
             },
-            cameraError: function(error) {                              // init when cameraError detected
+            cameraError: function(error) {
                 console.log(error);
             }
         };
-        /*---------------------------- Initialization: please check out examples --------------------------*/
-        /*-------------------------- Simple initialization with default parameters ------------------------*/
+        /*------------------------------------ Initialization: please check out examples ----------------------------------*/
+        /*---------------------------------- Simple initialization with default parameters --------------------------------*/
          new ExpertCamJS('video').init().play();
-        /*------------------------- Simple initialization with build select menu -------------------------*/
-        var cam = new ExpertCamJS('video').buildSelectMenu('#video', '#audio').init(args);
+        /*---------------------------------- Simple initialization with build select menu ---------------------------------*/
+        var cam = new ExpertCamJS('video').init(args).buildSelectMenu('#video', '#audio');
         function play(){
             cam.play();
         }
@@ -120,7 +125,10 @@ Required HTML & Javascript example
         function stop(){
             cam.stop();
         }
-        /*-------------------------- Simple initialization with play local video --------------------------*/
+        function openVideo(){
+           cam.playLocalVideo();
+        }
+        /*---------------------------------- Simple initialization with play local video ----------------------------------*/
         var args = {
             width: '100%',
             height: '100%',
@@ -138,25 +146,25 @@ Required HTML & Javascript example
                     cam.toggleFullScreen();
                 }
             }
-        /*-------------------------------------- Available funtions --------------------------------------*/
+        /*---------------------------------------------- Available funtions ----------------------------------------------*/
         cam.buildSelectMenu(selectorVideo, selectorAudio);  // build select menu, return ExpertCamJS object
         cam.pause();                                        // pause video, return ExpertCamJS object
-        cam.stop(boolean);                                  // stop video, boolean is true set video poster options.nosignal 
+        cam.stop(boolean);                                  // stop video, boolean is true set video poster options.noSignal
         cam.play();                                         // play stream, return ExpertCamJS object
         cam.getLastImageSrc();                              // grab image from video, return dataURL
         cam.isInitialized();                                // return true Or false
         cam.getStream();                                    // return Stream
-        cam.getVideo();                                     // return Video URL
+        cam.getVideo();                                     // return video element
         cam.cssFilter(type, val);                           // CSS3 filters example 'blur', '2px'
         cam.playLocalVideo();                               // open localvideo browser window
         cam.toggleFullScreen();                             // video toggle Full Screen
         cam.options                                         // return options get, set
         cam.version                                         // return version information
-        /*        for record and upload, merge video please check out the complex demo page source       */
+        HTMLVideoElement.streamSrc(stream)                  // cross browser createObject url function to play stream 
+        /*--------------- for record and upload, merge video please check out the complex demo page source ---------------*/
         </script>
     </body>
 </html>
-
 ```
 
 License

@@ -8,11 +8,6 @@
         <hr>
         <h1 style="text-align:center;">Initialize with default options and build select menu</h1>
         <hr>
-        Tested on:<br>
-        - Chrome Version 43.0.2357.124 m<br>
-        - Firefox 38.0.5<br>
-        - IE currently not supported
-        <hr>
         <h4>Video:</h4>
         <select id="video"></select>
         <hr>
@@ -31,7 +26,7 @@
         var args = {
         		noSignal: '../media/no_signal.png'
             };
-            var cam = new ExpertCamJS('video').buildSelectMenu('#video', '#audio').init(args);
+            var cam = new ExpertCamJS('video').init(args).buildSelectMenu('#video', '#audio');
             function play(){
                 cam.play();
             }
