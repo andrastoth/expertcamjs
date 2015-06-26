@@ -12,9 +12,9 @@ javascript Camera handler with some options.
 
 * [ExpertCamJS] - Online Demo 
 
-<img src = "compatiblity.png"/>
+<img src = "compatiblity.png" width="100%"/>
 
-<img src = "demo.png"/>
+<img src = "demo.png" width="100%"/>
 
 Version
 ----
