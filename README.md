@@ -20,6 +20,7 @@ Version
 ----
 
 1.5.0
+
     - Optimized for all modern browser
     
 Version
