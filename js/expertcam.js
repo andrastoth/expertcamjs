@@ -177,15 +177,15 @@ var ExpertCamJS = function(element) {
     }
 
     function NotSupportError(message) {
-        this.name = "NotSupportError";
-        this.message = (message || "");
+        this.name = 'NotSupportError';
+        this.message = (message || '');
     }
     NotSupportError.prototype = Error.prototype;
 
     function setEventListeners() {
         video.addEventListener('canplay', canPlay, false);
         video.addEventListener('play', nowPlay, false);
-        video.addEventListener("loadedmetadata", loadedMetaData, false);
+        video.addEventListener('loadedmetadata', loadedMetaData, false);
     }
 
     function nowPlay() {}
@@ -207,8 +207,12 @@ var ExpertCamJS = function(element) {
         video.pause();
         for (var st in streams) {
             if (streams[st]) {
-                streams[st].active = false;
-                streams[st].enabled = false;
+                try {
+                    streams[st].stop();
+                } catch (e) {
+                    streams[st].active = false;
+                    streams[st].enabled = false;
+                }
                 delete streams[st];
             }
         }
@@ -399,7 +403,7 @@ var ExpertCamJS = function(element) {
             }
         }
         for (var a = 2, l = arguments.length; a < l; a++) {
-            merge(target, arguments[a]);
+            mergeRecursive(target, arguments[a]);
         }
         return target;
     }
