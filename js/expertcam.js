@@ -1,14 +1,15 @@
 /*!
- * ExpertCamJS 1.5.0 javascript video-camera handler
+ * ExpertCamJS 1.6.0 javascript video-camera handler
  * Author: Tóth András
  * Web: http://atandrastoth.co.uk
  * email: atandrastoth@gmail.com
  * Licensed under the MIT license
  */
 var ExpertCamJS = function(element) {
+    'use strict';
     var Version = {
         name: 'ExpertCamJS',
-        version: '1.5.0.',
+        version: '1.6.0.',
         author: 'Tóth András'
     };
     var video = Q(element);
@@ -54,7 +55,7 @@ var ExpertCamJS = function(element) {
             console.log(error);
         }
     };
-    navigator.mediaDevices = navigator.mediaDevices || ((navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
+    var mediaDevices = navigator.mediaDevices || ((navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
         getUserMedia: function(c) {
             return new Promise(function(y, n) {
                 (navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia).call(navigator, c, y, n);
@@ -67,9 +68,9 @@ var ExpertCamJS = function(element) {
         }
     } : null);
     HTMLVideoElement.prototype.streamSrc = ('srcObject' in HTMLVideoElement.prototype) ? function(stream) {
-        this.srcObject = stream ? stream : null;
+        this.srcObject = !!stream ? stream : null;
     } : function(stream) {
-        this.src = stream ? (window.URL || window.webkitURL).createObjectURL(stream) : new String();
+        this.src = !!stream ? (window.URL || window.webkitURL).createObjectURL(stream) : new String();
     };
     var fullScreen = {
         isFullScreen: document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || document.msIsFullScreen,
@@ -112,7 +113,7 @@ var ExpertCamJS = function(element) {
         var constraints = changeConstraints();
         if (constraints.video || constraints.audio) {
             try {
-                navigator.mediaDevices.getUserMedia(constraints).then(cameraSuccess).catch(function(error) {
+                mediaDevices.getUserMedia(constraints).then(cameraSuccess).catch(function(error) {
                     options.cameraError(error);
                 });
             } catch (error) {
@@ -141,15 +142,15 @@ var ExpertCamJS = function(element) {
         videoSelect.innerHTML = '<option value="false">Off</option>';
         audioSelect.innerHTML = '<option value="false">Off</option>';
         try {
-            if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-                navigator.mediaDevices.enumerateDevices().then(function(devices) {
+            if (mediaDevices && mediaDevices.enumerateDevices) {
+                mediaDevices.enumerateDevices().then(function(devices) {
                     devices.forEach(function(device) {
                         gotSources(device);
                     });
                 }).catch(function(error) {
                     options.getDevicesError(error);
                 });
-            } else if (navigator.mediaDevices && !navigator.mediaDevices.enumerateDevices) {
+            } else if (mediaDevices && !mediaDevices.enumerateDevices) {
                 html('<option value="true">On</option>', audioSelect);
                 html('<option value="true">On</option>', videoSelect);
                 options.getDevicesError(new NotSupportError('enumerateDevices Or getSources is Not supported'));
