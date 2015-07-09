@@ -13,7 +13,7 @@
     </head>
     <body>
         <div class="page-header text-center">
-            <h1 style="color: cadetblue;">ExpertCamJS V 1.6.0<br>
+            <h1 style="color: cadetblue;">ExpertCamJS V 1.7.0<br>
                 <small>Download from:
                     <a href="https://github.com/andrastoth/expertcamjs" target="_blank"> GitHub </a> OR
                     <a href="http://www.jsclasses.org/package/433-JavaScript-camera-handler.html" target="_blank"> JSclasses </a>
@@ -21,7 +21,11 @@
             </h1>
             <p style="font-style: italic;">
                 <span class="glyphicon glyphicon-info-sign"></span> 
-                        News in this version: Optimized for all modern browsers
+                        1.6.0 News in this version: Optimized for all modern browsers
+                <span class="glyphicon glyphicon-info-sign"></span>
+                <br>
+                <span class="glyphicon glyphicon-info-sign"></span> 
+                        1.7.0 Capture image with parameters, download captured image
                 <span class="glyphicon glyphicon-info-sign"></span>
             </p>
         </div>
@@ -161,7 +165,8 @@
                 </div>
                 <div class="panel-footer">
                 <h3>Required HTML &amp; Javascript example</h3>
-<div style="background: #272822; overflow:auto;width:auto;height:400px;"><pre style="margin: 0; line-height: 125%"><span style="color: #f92672">&lt;html&gt;</span>
+<div style="background: #272822; overflow:auto;width:auto;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #75715e">&lt;!DOCTYPE html&gt;</span>
+<span style="color: #f92672">&lt;html&gt;</span>
     <span style="color: #f92672">&lt;head&gt;</span>
         <span style="color: #f92672">&lt;meta</span> <span style="color: #a6e22e">charset=</span><span style="color: #e6db74">&quot;UTF-8&quot;</span><span style="color: #f92672">&gt;</span>
         <span style="color: #f92672">&lt;title&gt;</span>ExpertCamJS<span style="color: #f92672">&lt;/title&gt;</span>
@@ -264,6 +269,8 @@
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">stop</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">boolean</span><span style="color: #f8f8f2">);</span>                                  <span style="color: #75715e">// stop video, boolean is true set video poster options.noSignal</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">play</span><span style="color: #f8f8f2">();</span>                                         <span style="color: #75715e">// play stream, return ExpertCamJS object</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">getLastImageSrc</span><span style="color: #f8f8f2">();</span>                              <span style="color: #75715e">// grab image from video, return dataURL</span>
+        <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">captureToImage</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">type</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">quality</span><span style="color: #f8f8f2">);</span>                  <span style="color: #75715e">// grab image from video, return dataURL with params</span>
+        <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">downloadCapturedImage</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">filename</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">type</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">quality</span><span style="color: #f8f8f2">);</span> <span style="color: #75715e">// grab image from video and download immediately</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">isInitialized</span><span style="color: #f8f8f2">();</span>                                <span style="color: #75715e">// return true Or false</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">getStream</span><span style="color: #f8f8f2">();</span>                                    <span style="color: #75715e">// return Stream</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">getVideo</span><span style="color: #f8f8f2">();</span>                                     <span style="color: #75715e">// return video element</span>

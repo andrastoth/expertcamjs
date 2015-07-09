@@ -19,6 +19,14 @@ javascript Camera handler with some options.
 Version
 ----
 
+1.7.0
+
+    - Capture image with parameters (type, quality)
+    - Capture image with parameters (filename, type, quality) and download
+
+Version
+----
+
 1.5.0
 
     - Optimized for all modern browser
@@ -155,6 +163,8 @@ Required HTML & Javascript example
         cam.stop(boolean);                                  // stop video, boolean is true set video poster options.noSignal
         cam.play();                                         // play stream, return ExpertCamJS object
         cam.getLastImageSrc();                              // grab image from video, return dataURL
+        cam.captureToImage(type, quality);                  // grab image from video, return dataURL with params
+        cam.downloadCapturedImage(filename, type, quality); // grab image from video and download immediately
         cam.isInitialized();                                // return true Or false
         cam.getStream();                                    // return Stream
         cam.getVideo();                                     // return video element

@@ -1,5 +1,5 @@
 /*!
- * ExpertCamJS 1.6.0 javascript video-camera handler
+ * ExpertCamJS 1.7.0 javascript video-camera handler
  * Author: Tóth András
  * Web: http://atandrastoth.co.uk
  * email: atandrastoth@gmail.com
@@ -9,7 +9,7 @@ var ExpertCamJS = function(element) {
     'use strict';
     var Version = {
         name: 'ExpertCamJS',
-        version: '1.6.0.',
+        version: '1.7.0.',
         author: 'Tóth András'
     };
     var video = Q(element);
@@ -124,7 +124,7 @@ var ExpertCamJS = function(element) {
 
     function gotSources(device) {
         if (device.kind === 'video' || device.kind === 'videoinput') {
-            var face = (!device.facing || device.facing === '') ? 'unknown' : device.facing;
+            var face = (!device.facing || !device.facingMode || device.facing === '') ? 'unknown' : device.facing || device.facingMode;
             var text = device.label || 'camera ' + videoSelect.length + ' (facing: ' + face + ')';
             html('<option value="' + (device.id || device.deviceId) + '">' + text + '</option>', videoSelect);
         }
@@ -245,14 +245,23 @@ var ExpertCamJS = function(element) {
         video.style[filterType] += type + '(' + val + ') ';
     }
 
-    function getLastImageSrc() {
+    function captureToImage(type, quality) {
+        type = !!type ? type : 'image/png';
+        quality = !!quality ? quality : 1.0;
         var canvas = document.createElement('canvas');
         var ratio = video.videoWidth / video.videoHeight;
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         var ctx = canvas.getContext('2d');
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        return canvas.toDataURL();
+        return canvas.toDataURL(type, quality);
+    }
+
+    function downloadCapturedImage(filename, type, quality) {
+        var a = window.document.createElement('a');
+        a.href = captureToImage(type, quality);
+        a.download = filename;
+        a.click();
     }
 
     function localVideo() {
@@ -462,8 +471,14 @@ var ExpertCamJS = function(element) {
             play();
             return this;
         },
-        getLastImageSrc: function() {
-            return getLastImageSrc();
+        getLastImageSrc: function(){
+            return captureToImage();
+        },
+        captureToImage: function(type, quality) {
+            return captureToImage(type, quality);
+        },
+        downloadCapturedImage: function(filename, type, quality) {
+            downloadCapturedImage(filename, type, quality);
         },
         isInitialized: function() {
             return initialized;
