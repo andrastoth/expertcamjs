@@ -74,7 +74,8 @@ button {
     color: #fff;
     background-color: rgba(255, 255, 255, 0);
 }
-.table-bordered *{
+.table-bordered {
+    color: #777;
     cursor: default;
 }
 .table-bordered a:hover{
@@ -91,4 +92,7 @@ button {
 }
 .table-bordered th img{
       float: left;
+}
+.table-bordered th, .table-bordered td{
+    vertical-align: middle !important;
 }

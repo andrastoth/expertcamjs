@@ -1,5 +1,5 @@
 /*!
- * ExpertCamJS 1.7.0 javascript video-camera handler
+ * ExpertCamJS 1.7.1 javascript video-camera handler
  * Author: Tóth András
  * Web: http://atandrastoth.co.uk
  * email: atandrastoth@gmail.com
@@ -9,7 +9,7 @@ var ExpertCamJS = function(element) {
     'use strict';
     var Version = {
         name: 'ExpertCamJS',
-        version: '1.7.0.',
+        version: '1.7.1.',
         author: 'Tóth András'
     };
     var video = Q(element);
@@ -55,7 +55,7 @@ var ExpertCamJS = function(element) {
             console.log(error);
         }
     };
-    var mediaDevices = navigator.mediaDevices || ((navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
+    var mediaDevices = (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) ? navigator.mediaDevices : ((navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
         getUserMedia: function(c) {
             return new Promise(function(y, n) {
                 (navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia).call(navigator, c, y, n);
@@ -123,13 +123,14 @@ var ExpertCamJS = function(element) {
     }
 
     function gotSources(device) {
+        var text, face;
         if (device.kind === 'video' || device.kind === 'videoinput') {
-            var face = (!device.facing || !device.facingMode || device.facing === '') ? 'unknown' : device.facing || device.facingMode;
-            var text = device.label || 'camera ' + videoSelect.length + ' (facing: ' + face + ')';
+            face = (!device.facing || !device.facingMode || device.facing === '') ? 'unknown' : device.facing || device.facingMode;
+            text = device.label || 'camera ' + videoSelect.length + ' (facing: ' + face + ')';
             html('<option value="' + (device.id || device.deviceId) + '">' + text + '</option>', videoSelect);
         }
         if (device.kind === 'audio' || device.kind === 'audioinput') {
-            var text = device.label || 'Michrophone ' + audioSelect.length;
+            text = device.label || 'Michrophone ' + audioSelect.length;
             html('<option value="' + (device.id || device.deviceId) + '">' + text + '</option>', audioSelect);
         }
         videoSelect.children[0].setAttribute('selected', true);
@@ -249,7 +250,6 @@ var ExpertCamJS = function(element) {
         type = !!type ? type : 'image/png';
         quality = !!quality ? quality : 1.0;
         var canvas = document.createElement('canvas');
-        var ratio = video.videoWidth / video.videoHeight;
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         var ctx = canvas.getContext('2d');
@@ -296,14 +296,13 @@ var ExpertCamJS = function(element) {
     function processSubtitle(e) {
         var subtitle = [];
         var rows = e.split('\n');
-        var sub = function() {
+        var Sub = function() {
             this.from = 0;
             this.to = 0;
             this.innerHTML = '';
         };
         var tmp;
         var rowAdd = false;
-        var textTrk;
         [].forEach.call(rows, function(row, index) {
             if (row.trim() === '') {
                 subtitle.push(tmp);
@@ -313,7 +312,7 @@ var ExpertCamJS = function(element) {
                 tmp.innerHTML += row.concat('\n');
             }
             if (row.indexOf('-->') !== -1) {
-                tmp = new sub();
+                tmp = new Sub();
                 tmp.from = createTime(row.split('-->')[0].trim());
                 tmp.to = createTime(row.split('-->')[1].trim());
                 rowAdd = true;
@@ -330,8 +329,8 @@ var ExpertCamJS = function(element) {
 
     function createTime(data) {
         var td = data.replace(/\D/g, '|').split('|');
-        var time1 = new Date('2000', '01', '01', '00', '00', '00', '000');
-        var time2 = new Date('2000', '01', '01', td[0], td[1], td[2], td[3]);
+        var time1 = new Date(2000, 1, 1, 0, 0, 0, 0);
+        var time2 = new Date(2000, 1, 1, td[0], td[1], td[2], td[3]);
         return (time2.getTime() - time1.getTime()) / 1000;
     }
 
@@ -372,10 +371,6 @@ var ExpertCamJS = function(element) {
         return constraints;
     }
 
-    function optimalZoom(zoom) {
-        return video.videoHeight / h;
-    }
-
     function cloneVideo() {
         var clone = video.cloneNode(true);
         (video.parentElement || video.parentNode).insertBefore(clone, video);
@@ -389,7 +384,7 @@ var ExpertCamJS = function(element) {
     function Q(el) {
         if (typeof el === 'string') {
             var els = document.querySelectorAll(el);
-            return typeof 'undefined' === els ? undefined : els.length > 1 ? els : els[0];
+            return typeof els === 'undefined' ? undefined : els.length > 1 ? els : els[0];
         }
         return el;
     }
@@ -471,7 +466,7 @@ var ExpertCamJS = function(element) {
             play();
             return this;
         },
-        getLastImageSrc: function(){
+        getLastImageSrc: function() {
             return captureToImage();
         },
         captureToImage: function(type, quality) {
