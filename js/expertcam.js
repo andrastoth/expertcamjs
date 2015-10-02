@@ -1,5 +1,5 @@
 /*!
- * ExpertCamJS 1.7.1 javascript video-camera handler
+ * ExpertCamJS 1.7.0 javascript video-camera handler
  * Author: Tóth András
  * Web: http://atandrastoth.co.uk
  * email: atandrastoth@gmail.com
@@ -9,12 +9,11 @@ var ExpertCamJS = function(element) {
     'use strict';
     var Version = {
         name: 'ExpertCamJS',
-        version: '1.7.1.',
+        version: '1.7.0.',
         author: 'Tóth András'
     };
     var video = Q(element);
-    var streams = {},
-        videoSelect = null,
+    var videoSelect = null,
         audioSelect = null,
         isStreaming = false,
         localStream = null,
@@ -138,8 +137,8 @@ var ExpertCamJS = function(element) {
     }
 
     function buildSelectMenu(selectorVideo, selectorAudio) {
-        videoSelect = Q(selectorVideo);
-        audioSelect = Q(selectorAudio);
+        videoSelect = new Q(selectorVideo);
+        audioSelect = new Q(selectorAudio);
         videoSelect.innerHTML = '<option value="false">Off</option>';
         audioSelect.innerHTML = '<option value="false">Off</option>';
         try {
@@ -167,7 +166,6 @@ var ExpertCamJS = function(element) {
         video.controls = false;
         video.muted = true;
         localStream = stream;
-        streams[stream.id] = stream;
         video.streamSrc(stream);
         options.cameraSuccess(stream);
         video.play();
@@ -207,15 +205,9 @@ var ExpertCamJS = function(element) {
         var src = bol ? '' : options.noSignal;
         noSignal(src);
         video.pause();
-        for (var st in streams) {
-            if (streams[st]) {
-                try {
-                    streams[st].stop();
-                } catch (e) {
-                    streams[st].active = false;
-                    streams[st].enabled = false;
-                }
-                delete streams[st];
+        if (localStream) {
+            for (var i = 0; i < localStream.getTracks().length; i++) {
+                localStream.getTracks()[i].stop();
             }
         }
         localStream = null;
@@ -493,7 +485,7 @@ var ExpertCamJS = function(element) {
         },
         toggleFullScreen: function(container) {
             if (container) {
-                container = Q(container);
+                container = new Q(container);
             } else {
                 container = video;
             }

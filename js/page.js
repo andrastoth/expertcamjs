@@ -25,7 +25,7 @@
     streamVideo.onended = function(e) {
         this.removeAttribute('src');
     };
-    var isChrome = !!navigator.webkitGetUserMedia;
+    var isWebpSupport = !!navigator.webkitGetUserMedia || (navigator.mediaDevices && navigator.userAgent.indexOf('Edge') !== -1);
     var camera;
     var args = {
         getDevicesError: function(error) {
@@ -115,12 +115,12 @@
             var multiStreamRecorder;
             var hasAudio = Boolean(stream.getAudioTracks().length);
             var hasVideo = Boolean(stream.getVideoTracks().length);
-            if (hasAudio && hasVideo && !isChrome) {
+            if (hasAudio && hasVideo && !isWebpSupport) {
                 multiStreamRecorder = new MediaStreamRecorder(stream);
                 multiStreamRecorder.mimeType = 'video/webm';
                 multiStreamRecorder.width = camera.options.width;
                 multiStreamRecorder.height = camera.options.height;
-            } else if (hasAudio && hasVideo && isChrome) {
+            } else if (hasAudio && hasVideo && isWebpSupport) {
                 multiStreamRecorder = new MultiStreamRecorder(stream);
                 multiStreamRecorder.video = camera.getVideo();
                 multiStreamRecorder.width = camera.options.width;
@@ -153,7 +153,7 @@
                 streamVideo.controls = false;
                 streamVideo.loop = true;
                 var data = new FormData();
-                if (isChrome && hasAudio && hasVideo) {
+                if (isWebpSupport && hasAudio && hasVideo) {
                     data.append('audio-filename', filename + '.ogg');
                     data.append('audio-blob', blob.audio);
                     data.append('video-filename', filename + '.webm');
