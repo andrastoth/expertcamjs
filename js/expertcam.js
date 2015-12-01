@@ -1,5 +1,5 @@
 /*!
- * ExpertCamJS 1.7.0 javascript video-camera handler
+ * ExpertCamJS 1.8.0 javascript video-camera handler
  * Author: Tóth András
  * Web: http://atandrastoth.co.uk
  * email: atandrastoth@gmail.com
@@ -9,7 +9,7 @@ var ExpertCamJS = function(element) {
     'use strict';
     var Version = {
         name: 'ExpertCamJS',
-        version: '1.7.0.',
+        version: '1.8.0.',
         author: 'Tóth András'
     };
     var video = Q(element);
@@ -33,7 +33,8 @@ var ExpertCamJS = function(element) {
             },
             audio: true
         },
-        noSignal: 'media/no_signal.png',
+        audioBackground: 'media/edgeaudio.jpg',
+        noSignalBackground: 'media/no_signal.png',
         videoTypes: 'video/mp4|video/webm|video/avi',
         audioTypes: 'audio/wav|audio/mp3|audio/ogg|audio/mp3',
         subTitleTypes: 'srt',
@@ -202,8 +203,8 @@ var ExpertCamJS = function(element) {
     }
 
     function stop(bol) {
-        var src = bol ? '' : options.noSignal;
-        noSignal(src);
+        var src = bol ? '' : options.noSignalBackground;
+        setPoster(src);
         video.pause();
         if (localStream) {
             for (var i = 0; i < localStream.getTracks().length; i++) {
@@ -265,6 +266,11 @@ var ExpertCamJS = function(element) {
                 var fileName = file.name.toLocaleLowerCase();
                 if (options.videoTypes.split('|').indexOf(fileType) !== -1 || options.audioTypes.split('|').indexOf(fileType) !== -1) {
                     // IE, srt must be load first ???
+                    if (options.audioTypes.split('|').indexOf(fileType) !== -1) {
+                        setPoster(options.audioBackground);
+                    } else {
+                        setPoster();
+                    }
                     setTimeout(function() {
                         video.src = URL.createObjectURL(file);
                         video.controls = true;
@@ -417,7 +423,7 @@ var ExpertCamJS = function(element) {
         return item.children[0];
     }
 
-    function noSignal(src) {
+    function setPoster(src) {
         if (src) {
             video.poster = src;
         } else {
@@ -438,7 +444,7 @@ var ExpertCamJS = function(element) {
             }
             if (opt) {
                 options = mergeRecursive(options, opt);
-                noSignal(options.noSignal);
+                setPoster(options.noSignalBackground);
             }
             return this;
         },

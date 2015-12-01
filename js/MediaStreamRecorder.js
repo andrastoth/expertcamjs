@@ -89,11 +89,10 @@ if (!window.AudioContext) {
 }
 
 URL = window.URL || window.webkitURL;
-navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
 if (window.webkitMediaStream) window.MediaStream = window.webkitMediaStream;
 
-IsChrome = !!navigator.webkitGetUserMedia;
+IsChrome = !!navigator.webkitGetUserMedia || (navigator.mediaDevices && navigator.userAgent.indexOf('Edge') !== -1);
 
 // Merge all other data-types except "function"
 
@@ -143,7 +142,7 @@ function MediaRecorderWrapper(mediaStream) {
     // if user chosen only audio option; and he tried to pass MediaStream with
     // both audio and video tracks;
     // using a dirty workaround to generate audio-only stream so that we can get audio/ogg output.
-    if (this.type == 'audio' && mediaStream.getVideoTracks && mediaStream.getVideoTracks().length && !navigator.mozGetUserMedia) {
+    if (this.type == 'audio' && mediaStream.getVideoTracks && mediaStream.getVideoTracks().length && IsChrome) {
         var context = new AudioContext();
         var mediaStreamSource = context.createMediaStreamSource(mediaStream);
 

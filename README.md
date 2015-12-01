@@ -19,6 +19,13 @@ javascript Camera handler with some options.
 Version
 ----
 
+1.8.0
+
+    - While playing audio files Display configurable poster.
+
+Version
+----
+
 1.7.0
 
     - Capture image with parameters (type, quality)
@@ -101,7 +108,8 @@ Required HTML & Javascript example
                 },
                 audio: true
             },
-            noSignal: 'media/no_signal.png',
+            audioBackground: 'media/edgeaudio.jpg',
+            noSignalBackground: 'media/no_signal.png',
             videoTypes: 'video/mp4|video/webm|video/avi',
             audioTypes: 'audio/wav|audio/mp3|audio/ogg|audio/mp3',
             subTitleTypes: 'srt',
@@ -160,7 +168,7 @@ Required HTML & Javascript example
         /*---------------------------------------------- Available funtions ----------------------------------------------*/
         cam.buildSelectMenu(selectorVideo, selectorAudio);  // build select menu, return ExpertCamJS object
         cam.pause();                                        // pause video, return ExpertCamJS object
-        cam.stop(boolean);                                  // stop video, boolean is true set video poster options.noSignal
+        cam.stop(boolean);                                  // stop video, boolean is true set video poster options.noSignalBackground
         cam.play();                                         // play stream, return ExpertCamJS object
         cam.getLastImageSrc();                              // grab image from video, return dataURL
         cam.captureToImage(type, quality);                  // grab image from video, return dataURL with params

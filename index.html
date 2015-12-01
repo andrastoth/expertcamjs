@@ -21,11 +21,15 @@
             </h1>
             <p style="font-style: italic;">
                 <span class="glyphicon glyphicon-info-sign"></span> 
-                        1.6.0 News in this version: Optimized for all modern browsers
+                        1.8.0 While playing audio files Display configurable poster
+                <span class="glyphicon glyphicon-info-sign"></span>
+                <br>        
+                <span class="glyphicon glyphicon-info-sign"></span> 
+                        1.7.0 Capture image with parameters, download captured image
                 <span class="glyphicon glyphicon-info-sign"></span>
                 <br>
                 <span class="glyphicon glyphicon-info-sign"></span> 
-                        1.7.0 Capture image with parameters, download captured image
+                        1.6.0 News in this version: Optimized for all modern browsers
                 <span class="glyphicon glyphicon-info-sign"></span>
             </p>
         </div>
@@ -165,7 +169,7 @@
                 </div>
                 <div class="panel-footer">
                 <h3>Required HTML &amp; Javascript example</h3>
-<div style="background: #272822; overflow:auto;width:auto;height:400px;"><pre style="margin: 0; line-height: 125%"><span style="color: #f92672">&lt;html&gt;</span>
+<!-- HTML generated using hilite.me --><div style="background: #272822; overflow:auto;width:auto;padding:0;height:400px;"><pre style="margin: 0; line-height: 125%"><span style="color: #f92672">&lt;html&gt;</span>
     <span style="color: #f92672">&lt;head&gt;</span>
         <span style="color: #f92672">&lt;meta</span> <span style="color: #a6e22e">charset=</span><span style="color: #e6db74">&quot;UTF-8&quot;</span><span style="color: #f92672">&gt;</span>
         <span style="color: #f92672">&lt;title&gt;</span>ExpertCamJS<span style="color: #f92672">&lt;/title&gt;</span>
@@ -206,7 +210,8 @@
                 <span style="color: #f8f8f2">},</span>
                 <span style="color: #a6e22e">audio</span><span style="color: #f92672">:</span> <span style="color: #66d9ef">true</span>
             <span style="color: #f8f8f2">},</span>
-            <span style="color: #a6e22e">noSignal</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;media/no_signal.png&#39;</span><span style="color: #f8f8f2">,</span>
+            <span style="color: #a6e22e">audioBackground</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;media/edgeaudio.jpg&#39;</span><span style="color: #f8f8f2">,</span>
+            <span style="color: #a6e22e">noSignalBackground</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;media/no_signal.png&#39;</span><span style="color: #f8f8f2">,</span>
             <span style="color: #a6e22e">videoTypes</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;video/mp4|video/webm|video/avi&#39;</span><span style="color: #f8f8f2">,</span>
             <span style="color: #a6e22e">audioTypes</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;audio/wav|audio/mp3|audio/ogg|audio/mp3&#39;</span><span style="color: #f8f8f2">,</span>
             <span style="color: #a6e22e">subTitleTypes</span><span style="color: #f92672">:</span> <span style="color: #e6db74">&#39;srt&#39;</span><span style="color: #f8f8f2">,</span>
@@ -265,7 +270,7 @@
         <span style="color: #75715e">/*---------------------------------------------- Available funtions ----------------------------------------------*/</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">buildSelectMenu</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">selectorVideo</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">selectorAudio</span><span style="color: #f8f8f2">);</span>  <span style="color: #75715e">// build select menu, return ExpertCamJS object</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">pause</span><span style="color: #f8f8f2">();</span>                                        <span style="color: #75715e">// pause video, return ExpertCamJS object</span>
-        <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">stop</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">boolean</span><span style="color: #f8f8f2">);</span>                                  <span style="color: #75715e">// stop video, boolean is true set video poster options.noSignal</span>
+        <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">stop</span><span style="color: #f8f8f2">(</span><span style="color: #66d9ef">boolean</span><span style="color: #f8f8f2">);</span>                                  <span style="color: #75715e">// stop video, boolean is true set video poster options.noSignalBackground</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">play</span><span style="color: #f8f8f2">();</span>                                         <span style="color: #75715e">// play stream, return ExpertCamJS object</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">getLastImageSrc</span><span style="color: #f8f8f2">();</span>                              <span style="color: #75715e">// grab image from video, return dataURL</span>
         <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">captureToImage</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">type</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">quality</span><span style="color: #f8f8f2">);</span>                  <span style="color: #75715e">// grab image from video, return dataURL with params</span>
