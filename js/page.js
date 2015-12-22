@@ -138,7 +138,7 @@
             }
             multiStreamRecorder.ondataavailable = function(blob) {
                 /*Without upload*/
-                /*
+                
                 var url = window.URL || window.webkitURL;
                 if (isChrome && hasAudio && hasVideo) {
                     window.open(url.createObjectURL(blob.video));
@@ -146,8 +146,9 @@
                 } else {
                     window.open(url.createObjectURL(blob));
                 }
-                */
+                
                 /*With upload*/
+                /*
                 streamVideo.src = 'media/loading.webm';
                 streamText[txt] = 'Processing video';
                 streamVideo.controls = false;
@@ -176,6 +177,7 @@
                         alert(fileURL);
                     }
                 });
+                */
             };
             setTimeout(function() {
                 multiStreamRecorder.stop();
