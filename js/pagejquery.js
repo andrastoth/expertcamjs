@@ -1,5 +1,5 @@
 /*!
- * ExpertCamJS 2.0.0 javascript video-camera handler
+ * ExpertCamJQuery 2.0.0 javascript video-camera handler
  * Author: Tóth András
  * Web: http://atandrastoth.co.uk
  * email: atandrastoth@gmail.com
@@ -7,28 +7,20 @@
  */
 (function(undefined) {
     'use strict';
-    function Q(el) {
-        if (typeof el === 'string') {
-            var els = document.querySelectorAll(el);
-            return typeof els === 'undefined' ? undefined : els.length > 1 ? els : els[0];
-        }
-        return el;
-    }
-    var txt = 'innerText' in HTMLElement.prototype ? 'innerText' : 'textContent';
-    var play = Q('#play'),
-        localVideo = Q('#local-video'),
-        videoSelect = Q('#video-select'),
-        audioSelect = Q('#audio-select'),
-        shootImg = Q('#shoot-img'),
-        shoot = Q('#shoot'),
-        pause = Q('#pause'),
-        record = Q('#record'),
-        streaming = Q('#streaming'),
-        streamVideo = Q('#stream-video'),
-        streamText = Q('#result .caption h3')[1];
-    streamVideo.onended = function(e) {
+    var play = $('#play'),
+        localVideo = $('#local-video'),
+        videoSelect = $('#video-select'),
+        audioSelect = $('#audio-select'),
+        shootImg = $('#shoot-img'),
+        shoot = $('#shoot'),
+        pause = $('#pause'),
+        record = $('#record'),
+        streaming = $('#streaming'),
+        streamVideo = $('#stream-video').get(0),
+        streamText = $('#result .caption h3').eq(0);
+    $(streamVideo).on('onended', function(e) {
         this.removeAttribute('src');
-    };
+    });
     var isWebpSupport = !!navigator.webkitGetUserMedia || (navigator.mediaDevices && navigator.userAgent.indexOf('Edge') !== -1);
     var camera;
     var args = {
@@ -66,26 +58,29 @@
     };
     Page.On = function() {
         if (!camera) {
-            camera = new ExpertCamJS('#camera-canvas').init(args).buildSelectMenu('#video-select', '#audio-select');
+            camera = $('#camera-canvas').ExpertCamJQuery(args).data().plugin_ExpertCamJQuery;
+            camera.buildSelectMenu('#video-select', '#audio-select').init();
+            window.cc = camera;
         } else {
             camera.stop();
             streamVideo.streamSrc();
         }
         toggleClass([record, shoot, pause], 'disabled', true);
         toggleClass([localVideo, play], 'disabled', false);
-        audioSelect.disabled = false;
-        videoSelect.disabled = false;
+        toggleClass([audioSelect, videoSelect], 'disabled', false);
+        audioSelect.attr('disabled', false);
+        videoSelect.attr('disabled', false);
     };
     Page.Play = function() {
-        if (videoSelect.selectedIndex !== 0 || audioSelect.selectedIndex !== 0) {
+        if (videoSelect.get(0).selectedIndex !== 0 || audioSelect.get(0).selectedIndex !== 0) {
             camera.play();
             toggleClass([shoot, pause, streaming], 'disabled', false);
-            audioSelect.disabled = true;
-            videoSelect.disabled = true;
+            audioSelect.attr('disabled', true);
+            videoSelect.attr('disabled', true);
         }
     };
     Page.Streaming = function() {
-        streamText[txt] = 'Captured stream';
+        streamText.text('Captured stream');
         streamVideo.controls = false;
         streamVideo.muted = true;
         if (camera && camera.getStream()) {
@@ -102,7 +97,7 @@
     Page.Shoot = function() {
         if (camera) {
             var src = camera.getLastImageSrc();
-            shootImg.setAttribute('src', src);
+            shootImg.attr('src', src);
         }
     };
     Page.LocalVideo = function() {
@@ -159,7 +154,7 @@
                 /*With upload*/
                 /*
                 streamVideo.src = 'media/loading.webm';
-                streamText[txt] = 'Processing video';
+                streamText.text('Processing video');
                 streamVideo.controls = false;
                 streamVideo.loop = true;
                 var data = new FormData();
@@ -178,7 +173,7 @@
                 xhr('save.php', data, function(fileURL) {
                     if (validURL(fileURL)) {
                         streamVideo.src = fileURL;
-                        streamText[txt] = 'Recorded stream';
+                        streamText.text('Recorded stream');
                         streamVideo.controls = true;
                         streamVideo.loop = false;
                         streamVideo.muted = false;
@@ -197,49 +192,49 @@
     };
     Page.changeBlurCSS = function(el) {
         camera.cssFilter('blur', el.value.toString() + 'px');
-        document.querySelector('#blur-value')[txt] = 'Blur: ' + el.value.toString() + 'px';
+        $('#blur-value').text('Blur: ' + el.value.toString() + 'px');
     };
     Page.changeBrightnessCSS = function(el) {
         camera.cssFilter('brightness', el.value);
-        document.querySelector('#brightness-value')[txt] = 'Brightness: ' + el.value.toString();
+        $('#brightness-value').text('Brightness: ' + el.value.toString());
     };
     Page.changeGrayscaleCSS = function(el) {
         camera.cssFilter('grayscale', el.value);
-        document.querySelector('#grayscale-value')[txt] = 'Grayscale: ' + el.value.toString();
+        $('#grayscale-value').text('Grayscale: ' + el.value.toString());
     };
     Page.changeContrastCSS = function(el) {
         camera.cssFilter('contrast', el.value);
-        document.querySelector('#contrast-value')[txt] = 'Contrast: ' + el.value.toString();
+        $('#contrast-value').text('Contrast: ' + el.value.toString());
     };
     Page.changeInvertCSS = function(el) {
         camera.cssFilter('invert', el.value);
-        document.querySelector('#invert-value')[txt] = 'Invert: ' + el.value.toString();
+        $('#invert-value').text('Invert: ' + el.value.toString());
     };
     Page.changeSepiaCSS = function(el) {
         camera.cssFilter('sepia', el.value);
-        document.querySelector('#sepia-value')[txt] = 'Sepia: ' + el.value.toString();
+        $('#sepia-value').text('Sepia: ' + el.value.toString());
     };
     Page.changeHueCSS = function(el) {
         camera.cssFilter('hue-rotate', el.value.toString() + 'deg');
-        document.querySelector('#hue-value')[txt] = 'Hue: ' + el.value.toString() + 'deg';
+        $('#hue-value').text('Hue: ' + el.value.toString() + 'deg');
     };
     Page.changeSaturateCSS = function(el) {
         camera.cssFilter('saturate', el.value);
-        document.querySelector('#saturate-value')[txt] = 'Saturate: ' + el.value;
+        $('#saturate-value').text('Saturate: ' + el.value);
     };
 
     function countDown(time) {
         var t = time;
         toggleClass([record], 'btn-danger', true);
-        record.innerHTML = '<span>&nbsp;' + t / 1E3 + '&nbsp;</span>';
+        record.html('<span>&nbsp;' + t / 1E3 + '&nbsp;</span>');
         var count = setInterval(function() {
             t -= 1E3;
-            record.innerHTML = '<span>&nbsp;' + t / 1E3 + '&nbsp;</span>';
+            record.html('<span>&nbsp;' + t / 1E3 + '&nbsp;</span>');
             if (t === 0) {
                 window.scrollTo(0, offset(streamVideo).top - 100);
                 clearInterval(count);
                 toggleClass([record], 'disabled', false);
-                record.innerHTML = '<span class="glyphicon glyphicon-record""></span>';
+                record.html('<span class="glyphicon glyphicon-record""></span>');
                 toggleClass([record], 'btn-danger', false);
             }
         }, 1E3);
@@ -271,12 +266,11 @@
     }
 
     function toggleClass(el, cl, bol) {
-        el.forEach(function(element, index) {
-            var list = element.classList;
+        $(el).each(function(index, element) {
             if (eval(bol)) {
-                list.add(cl);
+                element.addClass(cl);
             } else {
-                list.remove(cl);
+                element.removeClass(cl);
             }
         });
     }

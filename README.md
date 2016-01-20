@@ -1,5 +1,5 @@
-ExpertCamJS 
-=============
+ExpertCamJS  & ExpertCamJQuery
+==============================
 
 javascript Camera handler with some options.
 
@@ -15,6 +15,13 @@ javascript Camera handler with some options.
 <img src = "compatiblity.png" width="100%"/>
 
 <img src = "demo.png" width="100%"/>
+
+Version
+----
+
+2.0.0
+
+    - Add jquery version (ExpertCamJQuery)
 
 Version
 ----

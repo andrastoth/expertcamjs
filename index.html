@@ -8,18 +8,22 @@
         <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
         <meta http-equiv="pragma" content="no-cache" />
         <title>ExpertCamJS</title>
-        <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
     </head>
     <body>
         <div class="page-header text-center">
-            <h1 style="color: cadetblue;">ExpertCamJS V 1.7.0<br>
+            <h1 style="color: cadetblue;">ExpertCamJS V 2.0.0 <br>&<br> ExpertCamJQuery V 2.0.0 <br>
                 <small>Download from:
                     <a href="https://github.com/andrastoth/expertcamjs" target="_blank"> GitHub </a> OR
-                    <a href="http://www.jsclasses.org/package/433-JavaScript-camera-handler.html" target="_blank"> JSclasses </a>
+                    <a href="https://www.jsclasses.org/package/433-JavaScript-camera-handler.html" target="_blank"> JSclasses </a>
                 </small>
             </h1>
             <p style="font-style: italic;">
+                <span class="glyphicon glyphicon-info-sign"></span> 
+                        2.0.0 Add jquery version (ExpertCamJQuery)
+                <span class="glyphicon glyphicon-info-sign"></span>
+                <br>    
                 <span class="glyphicon glyphicon-info-sign"></span> 
                         1.8.0 While playing audio files Display configurable poster
                 <span class="glyphicon glyphicon-info-sign"></span>
@@ -234,9 +238,12 @@
         <span style="color: #f8f8f2">};</span>
         <span style="color: #75715e">/*------------------------------------ Initialization: please check out examples ----------------------------------*/</span>
         <span style="color: #75715e">/*---------------------------------- Simple initialization with default parameters --------------------------------*/</span>
-         <span style="color: #66d9ef">new</span> <span style="color: #a6e22e">ExpertCamJS</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;video&#39;</span><span style="color: #f8f8f2">).</span><span style="color: #a6e22e">init</span><span style="color: #f8f8f2">().</span><span style="color: #a6e22e">play</span><span style="color: #f8f8f2">();</span>
+        <span style="color: #66d9ef">new</span> <span style="color: #a6e22e">ExpertCamJS</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;video&#39;</span><span style="color: #f8f8f2">).</span><span style="color: #a6e22e">init</span><span style="color: #f8f8f2">().</span><span style="color: #a6e22e">play</span><span style="color: #f8f8f2">();</span>
         <span style="color: #75715e">/*---------------------------------- Simple initialization with build select menu ---------------------------------*/</span>
         <span style="color: #66d9ef">var</span> <span style="color: #a6e22e">cam</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">new</span> <span style="color: #a6e22e">ExpertCamJS</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;video&#39;</span><span style="color: #f8f8f2">).</span><span style="color: #a6e22e">init</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">args</span><span style="color: #f8f8f2">).</span><span style="color: #a6e22e">buildSelectMenu</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;#video&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&#39;#audio&#39;</span><span style="color: #f8f8f2">);</span>
+        <span style="color: #75715e">/*-------------------------- Simple initialization with build select menu (jQuery version) ------------------------*/</span>
+        <span style="color: #66d9ef">var</span> <span style="color: #a6e22e">cam</span> <span style="color: #f92672">=</span> <span style="color: #a6e22e">$</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;#camera-canvas&#39;</span><span style="color: #f8f8f2">).</span><span style="color: #a6e22e">ExpertCamJQuery</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">args</span><span style="color: #f8f8f2">).</span><span style="color: #a6e22e">data</span><span style="color: #f8f8f2">().</span><span style="color: #a6e22e">plugin_ExpertCamJQuery</span><span style="color: #f8f8f2">;</span>
+        <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">buildSelectMenu</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;#video-select&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&#39;#audio-select&#39;</span><span style="color: #f8f8f2">).</span><span style="color: #a6e22e">init</span><span style="color: #f8f8f2">();</span>
         <span style="color: #66d9ef">function</span> <span style="color: #a6e22e">play</span><span style="color: #f8f8f2">(){</span>
             <span style="color: #a6e22e">cam</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">play</span><span style="color: #f8f8f2">();</span>
         <span style="color: #f8f8f2">}</span>
@@ -292,6 +299,12 @@
                 </div>
             </div>
         </div>
+    <!-- 
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/MediaStreamRecorder.js"></script>
+        <script type="text/javascript" src="js/expertcamjquery.js"></script>
+        <script type="text/javascript" src="js/pagejquery.js"></script>
+    -->
         <script type="text/javascript" src="js/MediaStreamRecorder.js"></script>
         <script type="text/javascript" src="js/expertcam.js"></script>
         <script type="text/javascript" src="js/page.js"></script>

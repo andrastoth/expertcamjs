@@ -1,24 +1,37 @@
 /*!
- * ExpertCamJS 1.8.0 javascript video-camera handler
+ * ExpertCamJQuery 2.0.0 javascript video-camera handler
  * Author: Tóth András
  * Web: http://atandrastoth.co.uk
  * email: atandrastoth@gmail.com
  * Licensed under the MIT license
  */
-var ExpertCamJS = function(element) {
+(function($, window, document, undefined) {
     'use strict';
-    var Version = {
-        name: 'ExpertCamJS',
-        version: '1.8.0.',
-        author: 'Tóth András'
+    var pluginName = 'ExpertCamJQuery';
+    var mediaDevices = (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) ? navigator.mediaDevices : ((navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
+        getUserMedia: function(c) {
+            return new Promise(function(y, n) {
+                (navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia).call(navigator, c, y, n);
+            });
+        },
+        enumerateDevices: function(c) {
+            return new Promise(function(c, y, n) {
+                (MediaStreamTrack.getSources).call(navigator, c, y, n);
+            });
+        }
+    } : null);
+    HTMLVideoElement.prototype.streamSrc = ('srcObject' in HTMLVideoElement.prototype) ? function(stream) {
+        this.srcObject = !!stream ? stream : null;
+    } : function(stream) {
+        this.src = !!stream ? (window.URL || window.webkitURL).createObjectURL(stream) : new String();
     };
-    var video = Q(element);
+    var video, Self;
     var videoSelect = null,
         audioSelect = null,
         isStreaming = false,
         localStream = null,
         initialized = false;
-    var options = {
+    var defaults = {
         width: 320,
         height: 240,
         constraints: {
@@ -55,23 +68,16 @@ var ExpertCamJS = function(element) {
             console.log(error);
         }
     };
-    var mediaDevices = (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) ? navigator.mediaDevices : ((navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
-        getUserMedia: function(c) {
-            return new Promise(function(y, n) {
-                (navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia).call(navigator, c, y, n);
-            });
-        },
-        enumerateDevices: function(c) {
-            return new Promise(function(c, y, n) {
-                (MediaStreamTrack.getSources).call(navigator, c, y, n);
-            });
-        }
-    } : null);
-    HTMLVideoElement.prototype.streamSrc = ('srcObject' in HTMLVideoElement.prototype) ? function(stream) {
-        this.srcObject = !!stream ? stream : null;
-    } : function(stream) {
-        this.src = !!stream ? (window.URL || window.webkitURL).createObjectURL(stream) : new String();
-    };
+
+    function Plugin(element, options) {
+        Self = this;
+        this.element = element;
+        video = element;
+        this.options = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        return this;
+    }
     var fullScreen = {
         isFullScreen: document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || document.msIsFullScreen,
         toggleFullScreen: function(selector) {
@@ -83,7 +89,7 @@ var ExpertCamJS = function(element) {
             return this.isFullScreen;
         },
         goFullScreen: function(selector) {
-            var element = Q(selector);
+            var element = $(selector).get(0);
             if (element.requestFullScreen) {
                 element.requestFullScreen();
             } else if (element.mozRequestFullScreen) {
@@ -108,16 +114,16 @@ var ExpertCamJS = function(element) {
     };
 
     function init() {
-        video.setAttribute('width', options.width);
-        video.setAttribute('height', options.height);
+        $(video).attr('width', Self.options.width);
+        $(video).attr('height', Self.options.height);
         var constraints = changeConstraints();
         if (constraints.video || constraints.audio) {
             try {
                 mediaDevices.getUserMedia(constraints).then(cameraSuccess).catch(function(error) {
-                    options.cameraError(error);
+                    Self.options.cameraError(error);
                 });
             } catch (error) {
-                options.getUserMediaError(error);
+                Self.options.getUserMediaError(error);
             }
         }
     }
@@ -126,22 +132,22 @@ var ExpertCamJS = function(element) {
         var text, face;
         if (device.kind === 'video' || device.kind === 'videoinput') {
             face = (!device.facing || !device.facingMode || device.facing === '') ? 'unknown' : device.facing || device.facingMode;
-            text = device.label || 'camera ' + videoSelect.length + ' (facing: ' + face + ')';
-            html('<option value="' + (device.id || device.deviceId) + '">' + text + '</option>', videoSelect);
+            text = device.label || 'camera ' + videoSelect.children().length + ' (facing: ' + face + ')';
+            videoSelect.append($('<option value="' + (device.id || device.deviceId) + '">' + text + '</option>'));
         }
         if (device.kind === 'audio' || device.kind === 'audioinput') {
-            text = device.label || 'Michrophone ' + audioSelect.length;
-            html('<option value="' + (device.id || device.deviceId) + '">' + text + '</option>', audioSelect);
+            text = device.label || 'Michrophone ' + audioSelect.children().length;
+            audioSelect.append($('<option value="' + (device.id || device.deviceId) + '">' + text + '</option>'));
         }
-        videoSelect.children[0].setAttribute('selected', true);
-        audioSelect.children[0].setAttribute('selected', true);
+        videoSelect.children().eq(0).attr('selected', true);
+        audioSelect.children().eq(0).attr('selected', true);
     }
 
     function buildSelectMenu(selectorVideo, selectorAudio) {
-        videoSelect = Q(selectorVideo);
-        audioSelect = Q(selectorAudio);
-        videoSelect.innerHTML = '<option value="false">Off</option>';
-        audioSelect.innerHTML = '<option value="false">Off</option>';
+        videoSelect = $(selectorVideo);
+        audioSelect = $(selectorAudio);
+        videoSelect.html('<option value="false">Off</option>');
+        audioSelect.html('<option value="false">Off</option>');
         try {
             if (mediaDevices && mediaDevices.enumerateDevices) {
                 mediaDevices.enumerateDevices().then(function(devices) {
@@ -149,17 +155,17 @@ var ExpertCamJS = function(element) {
                         gotSources(device);
                     });
                 }).catch(function(error) {
-                    options.getDevicesError(error);
+                    Self.options.getDevicesError(error);
                 });
             } else if (mediaDevices && !mediaDevices.enumerateDevices) {
-                html('<option value="true">On</option>', audioSelect);
-                html('<option value="true">On</option>', videoSelect);
-                options.getDevicesError(new NotSupportError('enumerateDevices Or getSources is Not supported'));
+                audioSelect.append($('<option value="true">On</option>'));
+                videoSelect.append($('<option value="true">On</option>'));
+                Self.options.getDevicesError(new NotSupportError('enumerateDevices Or getSources is Not supported'));
             } else {
                 throw new NotSupportError('getUserMedia is Not supported');
             }
         } catch (error) {
-            options.getDevicesError(error);
+            Self.options.getDevicesError(error);
         }
     }
 
@@ -168,12 +174,12 @@ var ExpertCamJS = function(element) {
         video.muted = true;
         localStream = stream;
         video.streamSrc(stream);
-        options.cameraSuccess(stream);
+        Self.options.cameraSuccess(stream);
         video.play();
     }
 
     function cameraError(error) {
-        options.cameraError(error);
+        Self.options.cameraError(error);
         return false;
     }
 
@@ -184,16 +190,16 @@ var ExpertCamJS = function(element) {
     NotSupportError.prototype = Error.prototype;
 
     function setEventListeners() {
-        video.addEventListener('canplay', canPlay, false);
-        video.addEventListener('play', nowPlay, false);
-        video.addEventListener('loadedmetadata', loadedMetaData, false);
+        $(video).on('canplay', canPlay);
+        $(video).on('play', nowPlay);
+        $(video).on('loadedmetadata', loadedMetaData);
     }
 
     function nowPlay() {}
 
     function canPlay() {
         isStreaming = true;
-        options.canPlayFunction();
+        Self.options.canPlayFunction();
     }
 
     function loadedMetaData() {}
@@ -203,7 +209,7 @@ var ExpertCamJS = function(element) {
     }
 
     function stop(bol) {
-        var src = bol ? '' : options.noSignalBackground;
+        var src = bol ? '' : Self.options.noSignalBackground;
         setPoster(src);
         video.pause();
         if (localStream) {
@@ -242,7 +248,7 @@ var ExpertCamJS = function(element) {
     function captureToImage(type, quality) {
         type = !!type ? type : 'image/png';
         quality = !!quality ? quality : 1.0;
-        var canvas = document.createElement('canvas');
+        var canvas = $('<canvas>').get(0);
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         var ctx = canvas.getContext('2d');
@@ -251,27 +257,27 @@ var ExpertCamJS = function(element) {
     }
 
     function downloadCapturedImage(filename, type, quality) {
-        var a = html('<a style="display:none;">');
-        a.href = captureToImage(type, quality);
-        a.download = filename;
-        Q('body').appendChild(a);
-        a.click();
+        var a = $('<a style="display:none;">');
+        a.attr('href', captureToImage(type, quality));
+        a.prop('download', filename);
+        a.appendTo('body');
+        a.get(0).click();
         setTimeout(function() {
-            removeElement(a);
+            a.remove();
         }, 300);
     }
 
     function localVideo() {
         stop(true);
-        var input = html('<input type="file" accept="*.*" multiple style="display:none;">');
-        input.onchange = function() {
+        var input = $('<input type="file" accept="*.*" multiple style="display:none;">');
+        input.change(function() {
             [].forEach.call(this.files, function(file, index) {
                 var fileType = file.type.toLocaleLowerCase();
                 var fileName = file.name.toLocaleLowerCase();
-                if (options.videoTypes.split('|').indexOf(fileType) !== -1 || options.audioTypes.split('|').indexOf(fileType) !== -1) {
+                if (Self.options.videoTypes.split('|').indexOf(fileType) !== -1 || Self.options.audioTypes.split('|').indexOf(fileType) !== -1) {
                     // IE, srt must be load first ???
-                    if (options.audioTypes.split('|').indexOf(fileType) !== -1) {
-                        setPoster(options.audioBackground);
+                    if (Self.options.audioTypes.split('|').indexOf(fileType) !== -1) {
+                        setPoster(Self.options.audioBackground);
                     } else {
                         setPoster();
                     }
@@ -281,20 +287,20 @@ var ExpertCamJS = function(element) {
                         video.muted = false;
                     }, 500);
                 }
-                if (options.subTitleTypes.split('|').indexOf(fileName.split('.').reverse()[0]) !== -1) {
+                if (Self.options.subTitleTypes.split('|').indexOf(fileName.split('.').reverse()[0]) !== -1) {
                     var reader = new FileReader();
                     reader.onload = (function(file) {
                         return function(e) {
                             processSubtitle(e.target.result);
                         };
                     })(file);
-                    reader.readAsText(file, options.subTitleCoding);
+                    reader.readAsText(file, Self.options.subTitleCoding);
                 }
             });
-            removeElement(input);
-        };
-        Q('body').appendChild(input);
-        input.click();
+            input.remove();
+        });
+        input.appendTo('body');
+        input.get(0).click();
     }
 
     function processSubtitle(e) {
@@ -309,23 +315,23 @@ var ExpertCamJS = function(element) {
         var rowAdd = false;
         var start = false;
         [].forEach.call(rows, function(row, index) {
-            if (row.trim() === '1') {
+        	if (row.trim() === '1') {
                 start = true;
             }
-            if(start){
-                if (row.trim() === '') {
-                    subtitle.push(tmp);
-                    rowAdd = false;
-                }
-                if (rowAdd) {
-                    tmp.innerHTML += row.concat('\n');
-                }
-                if (row.indexOf('-->') !== -1) {
-                    tmp = new Sub();
-                    tmp.from = createTime(row.split('-->')[0].trim());
-                    tmp.to = createTime(row.split('-->')[1].trim());
-                    rowAdd = true;
-                }
+        	if(start){
+	            if (row.trim() === '') {
+	                subtitle.push(tmp);
+	                rowAdd = false;
+	            }
+	            if (rowAdd) {
+	                tmp.innerHTML += row.concat('\n');
+	            }
+	            if (row.indexOf('-->') !== -1) {
+	                tmp = new Sub();
+	                tmp.from = createTime(row.split('-->')[0].trim());
+	                tmp.to = createTime(row.split('-->')[1].trim());
+	                rowAdd = true;
+	            }
             }
         });
         subtitle.push(tmp);
@@ -345,9 +351,9 @@ var ExpertCamJS = function(element) {
     }
 
     function changeConstraints() {
-        var constraints = JSON.parse(JSON.stringify(options.constraints));
+        var constraints = JSON.parse(JSON.stringify(Self.options.constraints));
         if (videoSelect && audioSelect) {
-            switch (videoSelect[videoSelect.selectedIndex].value.toString()) {
+            switch (videoSelect.val().toString()) {
                 case 'true':
                     constraints.video.optional = [{
                         sourceId: true
@@ -358,11 +364,11 @@ var ExpertCamJS = function(element) {
                     break;
                 default:
                     constraints.video.optional = [{
-                        sourceId: videoSelect[videoSelect.selectedIndex].value
+                        sourceId: videoSelect.val()
                     }];
                     break;
             }
-            switch (audioSelect[audioSelect.selectedIndex].value.toString()) {
+            switch (audioSelect.val().toString()) {
                 case 'true':
                     constraints.audio.optional = [{
                         sourceId: true
@@ -373,7 +379,7 @@ var ExpertCamJS = function(element) {
                     break;
                 default:
                     constraints.video.optional = [{
-                        sourceId: audioSelect[audioSelect.selectedIndex].value
+                        sourceId: audioSelect.val()
                     }];
                     break;
             }
@@ -382,57 +388,13 @@ var ExpertCamJS = function(element) {
     }
 
     function cloneVideo() {
-        var clone = video.cloneNode(true);
-        (video.parentElement || video.parentNode).insertBefore(clone, video);
-        removeElement(video);
-        video = clone;
+        var clone = $(video).clone(true);
+        clone.insertBefore(video);
+        $(video).remove();
+        video = clone.get(0);
         video.controls = false;
         video.muted = true;
         setEventListeners();
-    }
-
-    function Q(el) {
-        if (typeof el === 'string') {
-            var els = document.querySelectorAll(el);
-            return typeof els === 'undefined' ? undefined : els.length > 1 ? els : els[0];
-        }
-        return el;
-    }
-
-    function removeElement(el) {
-        el && el.parentNode && el.parentNode.removeChild(el);
-    }
-
-    function mergeRecursive(target, source) {
-        if (typeof target !== 'object') {
-            target = {};
-        }
-        for (var property in source) {
-            if (source.hasOwnProperty(property)) {
-                var sourceProperty = source[property];
-                if (typeof sourceProperty === 'object') {
-                    target[property] = mergeRecursive(target[property], sourceProperty);
-                    continue;
-                }
-                target[property] = sourceProperty;
-            }
-        }
-        for (var a = 2, l = arguments.length; a < l; a++) {
-            mergeRecursive(target, arguments[a]);
-        }
-        return target;
-    }
-
-    function html(innerinnerHTML, appendTo) {
-        var item = document.createElement('div');
-        if (innerinnerHTML) {
-            item.innerHTML = innerinnerHTML;
-        }
-        if (appendTo) {
-            appendTo.appendChild(item.children[0]);
-            return item;
-        }
-        return item.children[0];
     }
 
     function setPoster(src) {
@@ -445,7 +407,7 @@ var ExpertCamJS = function(element) {
         video.streamSrc();
         cloneVideo();
     }
-    return {
+    $.extend(Plugin.prototype, {
         init: function(opt) {
             if (initialized) {
                 return this;
@@ -455,8 +417,8 @@ var ExpertCamJS = function(element) {
                 return false;
             }
             if (opt) {
-                options = mergeRecursive(options, opt);
-                setPoster(options.noSignalBackground);
+                this.options = mergeRecursive(this.options, opt);
+                setPoster(this.options.noSignalBackground);
             }
             return this;
         },
@@ -503,14 +465,19 @@ var ExpertCamJS = function(element) {
         },
         toggleFullScreen: function(container) {
             if (container) {
-                container = Q(container);
+                container = new Q(container);
             } else {
                 container = video;
             }
             fullScreen.toggleFullScreen(container);
             return this;
-        },
-        options: options,
-        version: Version
+        }
+    });
+    $.fn[pluginName] = function(options) {
+        return this.each(function() {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName, new Plugin(this, options));
+            }
+        });
     };
-};
+})(jQuery, window, document);

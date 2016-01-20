@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>ExpertCamJS</title>
+    </head>
+    <body>
+        <hr>
+        <h1 style="text-align:center;">Initialize with default options</h1>
+        <hr>
+        <video></video>
+        <hr>
+        <script type="text/javascript" src="../js/jquery.js"></script>
+        <script type="text/javascript" src="../js/expertcamjquery.js"></script>
+        <script type="text/javascript">
+            var args = {
+        		noSignal: '../media/no_signal.png',
+                constraints: {
+                    video: true,
+                    audio: false
+                }
+            };
+            $('video').ExpertCamJQuery(args).data().plugin_ExpertCamJQuery.play();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Demo</title>
+    </head>
+    <body>
+        <hr>
+        <h1 style="text-align:center;">Initialize with default options and build select menu</h1>
+        <hr>
+        <h4>Video:</h4>
+        <select id="video"></select>
+        <hr>
+        <h4>Audio:</h4>
+        <select id="audio"></select>
+        <hr>
+        <video></video>
+        <hr>
+        <button type="button" onclick="play()">play</button>
+        <button type="button" onclick="pause()">pause</button>
+        <button type="button" onclick="stop()">stop</button>
+        <hr>
+        <script type="text/javascript" src="../js/jquery.js"></script>
+        <script type="text/javascript" src="../js/expertcamjquery.js"></script>
+        <script type="text/javascript">
+        //path correction !!!
+        var args = {
+        		noSignal: '/media/no_signal.png'
+            };
+            var cam = $('video').ExpertCamJQuery(args).data().plugin_ExpertCamJQuery.buildSelectMenu('#video', '#audio');
+            function play(){
+                cam.play();
+            }
+            function pause(){
+                cam.pause();
+            }
+            function stop(){
+                cam.stop();
+            }
+        </script>
+    </body>
+</html>

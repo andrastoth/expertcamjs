@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>ExpertCamJS</title>
+        <title>ExpertCamJQuery</title>
         <style type="text/css">
             .video-container{
                 display: inline-block;
@@ -29,10 +29,11 @@
         <button type="button" onclick="openVideo();">Open</button>
         <button type="button" onclick="goFullScreen();">Fullsreen</button>
         <hr>
-        <script type="text/javascript" src="../js/expertcam.js"></script>
+        <script type="text/javascript" src="../js/jquery.js"></script>
+        <script type="text/javascript" src="../js/expertcamjquery.js"></script>
         <script type="text/javascript">
         var args = {
-            //path correction
+            //path correction !!!
         	noSignal: '/media/no_signal.png',
             width: '100%',
             height: '100%',
@@ -42,7 +43,7 @@
                 },
              subTitleCoding: 'windows-1252'
             };
-            var cam = new ExpertCamJS('video').init(args);
+             var cam = $('video').ExpertCamJQuery(args).data().plugin_ExpertCamJQuery;
             function openVideo(){
                 cam.playLocalVideo();
             }
