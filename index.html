@@ -13,13 +13,17 @@
     </head>
     <body>
         <div class="page-header text-center">
-            <h1 style="color: cadetblue;">ExpertCamJS V 2.0.0 <br>&<br> ExpertCamJQuery V 2.0.0 <br>
+            <h1 style="color: cadetblue;">ExpertCamJS V 2.2.0 <br>&<br> ExpertCamJQuery V 2.2.0 <br>
                 <small>Download from:
                     <a href="https://github.com/andrastoth/expertcamjs" target="_blank"> GitHub </a> OR
                     <a href="https://www.jsclasses.org/package/433-JavaScript-camera-handler.html" target="_blank"> JSclasses </a>
                 </small>
             </h1>
             <p style="font-style: italic;">
+                <span class="glyphicon glyphicon-info-sign"></span> 
+                        2.2.0 fully works on Edge, Chrome, Fiirefox, Opera
+                <span class="glyphicon glyphicon-info-sign"></span>
+                <br>    
                 <span class="glyphicon glyphicon-info-sign"></span> 
                         2.0.0 Add jquery version (ExpertCamJQuery)
                 <span class="glyphicon glyphicon-info-sign"></span>
@@ -39,24 +43,24 @@
         </div>
         <div class="container text-center">
           <h2>Compatibility Table</h2>
-          <p>Current state of browser compatibility 2015-06-26</p>            
+          <p>Current state of browser compatibility 2017-10-01</p>            
           <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Functions</th>
-                    <th><a>IE11</a><img src="css/Internet_Explorer_9.png"></th>
-                    <th><a>MS Spartan</a><img src="css/949320192f43b9d8.png"></th>
-                    <th><a>Chrome 43</a><img src="css/google-chrome.png"></th>
-                    <th><a>Chrome Canary</a><img src="css/Chrome_Canary_Icon.png"></th>
-                    <th><a>Firefox 38.0.5</a><img src="css/mozilla_firefox.png"></th>
-                    <th><a>Firefox Nightly</a><img src="css/firefox-dev.png"></th>
+                    <th><a>IOS Safari</a><img src="css/safari-icon.png"></th>
+                    <th><a>Microsoft IE 11</a><img src="css/Internet_Explorer_9.png"></th>
+                    <th><a>MS Edge latest</a><img src="css/949320192f43b9d8.png"></th>
+                    <th><a>Chrome latest</a><img src="css/google-chrome.png"></th>
+                    <th><a>Firefox latest</a><img src="css/mozilla_firefox.png"></th>
+                    <th><a>Opera latest</a><img src="css/opera.png"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td><strong><a>Media stream capture</a></strong></td>
                     <td class="danger">No</td>
-                    <td class="success">Yes</td>
+                    <td class="danger">No</td>
                     <td class="success">Yes</td>
                     <td class="success">Yes</td>
                     <td class="success">Yes</td>
@@ -66,33 +70,33 @@
                     <td><strong><a>Media stream record</a></strong></td>
                     <td class="danger">No</td>
                     <td class="danger">No</td>
-                    <td class="warning">Partial when recording<br>audio and video<br>FFmpeg required</td>
+                    <td class="danger">No</td>
                     <td class="warning">Partial when recording<br>audio and video<br>FFmpeg required</td>
                     <td class="success">Yes</td>
-                    <td class="success">Yes</td>
+                    <td class="warning">Partial when recording<br>audio and video<br>FFmpeg required</td>
                 </tr>
                 <tr>
                     <td><strong><a>Build select menu</a></strong></td>
                     <td class="danger">No</td>
+                    <td class="danger">No</td>
                     <td class="success">Yes</td>
                     <td class="success">Yes</td>
                     <td class="success">Yes</td>
-                    <td class="warning">Partial (On/Off) but selectable<br> on built in pop up window</td>
                     <td class="success">Yes</td>
                 </tr>
                 <tr>
                     <td><strong><a>Local Video with subtitle</a></strong></td>
-                    <td class="success">Excellent<br>built in audio track, <br>subtitle track selector</td>
-                    <td class="success">Excellent<br>built in audio track, <br>subtitle track selector</td>
                     <td class="success">Yes</td>
+                    <td class="success">Excellent<br>built in audio track, <br>subtitle track selector</td>
+                    <td class="success">Excellent<br>built in audio track, <br>subtitle track selector</td>
                     <td class="success">Yes</td>
                     <td class="success">Yes</td>
                     <td class="success">Yes</td>
                 </tr>
                 <tr>
                     <td><strong><a>CSS filters</a></strong></td>
-                    <td class="danger">No</td>
                     <td class="success">Yes</td>
+                    <td class="danger">No</td>
                     <td class="success">Yes</td>
                     <td class="success">Yes</td>
                     <td class="success">Yes</td>
@@ -154,7 +158,7 @@
                     </div>
                     <div class="col-md-6 text-center">
                         <div id="result" class="thumbnail">
-                            <div class="well">
+                            <div class="well" style="overflow: hidden;">
                                 <img id="shoot-img" src="" width="320" height="240">
                             </div>
                             <div class="caption">

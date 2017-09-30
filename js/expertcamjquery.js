@@ -1,5 +1,5 @@
 /*!
- * ExpertCamJQuery 2.0.0 javascript video-camera handler
+ * ExpertCamJQuery 2.2.0 javascript video-camera handler
  * Author: Tóth András
  * Web: http://atandrastoth.co.uk
  * email: atandrastoth@gmail.com
@@ -355,17 +355,29 @@
         if (videoSelect && audioSelect) {
             switch (videoSelect.val().toString()) {
                 case 'true':
-                    constraints.video.optional = [{
-                        sourceId: true
-                    }];
+                    if (navigator.userAgent.search("Edge") == -1 && navigator.userAgent.search("Chrome") != -1) {
+                        constraints.video.optional = [{
+                            sourceId: true
+                        }];
+                    } else {
+                        constraints.video.deviceId = undefined;  
+                    }
                     break;
                 case 'false':
                     constraints.video = false;
                     break;
                 default:
-                    constraints.video.optional = [{
-                        sourceId: videoSelect.val()
-                    }];
+                    if (navigator.userAgent.search("Edge") == -1 && navigator.userAgent.search("Chrome") != -1) {
+                        constraints.video.optional = [{
+                            sourceId: videoSelect[videoSelect.selectedIndex].value
+                        }];
+                    } else if (navigator.userAgent.search("Firefox") != -1) {
+                        constraints.video.deviceId = {
+                            exact: videoSelect.val()
+                        };
+                    } else {
+                         constraints.video.deviceId = videoSelect.val();
+                    }
                     break;
             }
             switch (audioSelect.val().toString()) {
