@@ -19,6 +19,14 @@ javascript Camera handler with some options.
 Version
 ----
 
+2.2.0
+
+    - Extend browser ccompatibility
+
+
+Version
+----
+
 2.0.0
 
     - Add jquery version (ExpertCamJQuery)
